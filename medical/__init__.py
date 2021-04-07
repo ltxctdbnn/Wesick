@@ -27,7 +27,6 @@ def create_app():
 
     #cors
     CORS(app, supports_credentials=True)
-
     # 블루프린트
 # --------------------------------------------------------------------------- #    
     from .views import auth, community
