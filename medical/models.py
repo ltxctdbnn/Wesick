@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, backref
 
 
 class User(db.Model): #usertable
-    __tablename__ = 'user'
+    __tablename__ = 'user_table'
     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -17,15 +17,23 @@ class User(db.Model): #usertable
     usertype=db.Column(db.String(32))
 
 
-# class Post_history(db.Model): #post history table
-#     tablename = 'post_history_table'
-#     table_args = {'mysql_collate': 'utf8_general_ci'}
+class Post_history(db.Model): #post history table
+    __tablename__ = 'post_history_table'
+    __table_args__ = {'mysql_collate': 'utf8_general_ci'}
 
-#     _id2 = db.Column(db.Integer, primary_key=True)
-#     userid = db.Column(db.Integer, ForeignKey('usertable.id'))
-#     date = db.Column(db.DATE,nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.String(64), unique=True)
+    postid= db.Column(db.String(64), unique=True)
+    date = db.Column(db.DATE)
+    posttype=db.Column(db.String(64), unique=True)
 
 
-mydb = client['medical'] #db name
-mycol = mydb['community_post'] #collection name
-# community = mycol.insert_one({"userid":"", "date":"", "content":"", "comments":"", "like":""})
+class comments_info(db.Model): #comments_info table
+    __tablename__ = 'comment_table'
+    __table_args__ = {'mysql_collate': 'utf8_general_ci'}
+
+    id = db.Column(db.Integer, primary_key=True)
+    post_userid = db.Column(db.String(64), unique=True)
+    comment_userid=db.Column(db.String(64), unique=True)
+    postid=db.Column(db.String(64), unique=True)
+    date = db.Column(db.DATE)

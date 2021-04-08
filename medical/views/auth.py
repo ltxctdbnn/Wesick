@@ -8,6 +8,10 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, g
 
 bp = Blueprint('auth', __name__, url_prefix='/')
 
+mydb = models.client['medical'] #db name
+mycol = mydb['user_interest'] #collection name
+
+
 # # bp 테스트
 # @bp.route('/') 
 # def home():
@@ -72,13 +76,24 @@ def login():
         elif not userPassword:
             return jsonify({"msg": "비번 치세요", 'status':401})
 
-        checkpw=models.User.query.filter_by(email=userEmail).first()
-        print('checkpw:', checkpw)
-        if bcrypt.checkpw(userPassword.encode('utf-8'), checkpw.pw.encode('utf-8')):
+        queried=models.User.query.filter_by(email=userEmail).first()
+        print('checkpw:', queried)
+        if bcrypt.checkpw(userPassword.encode('utf-8'), queried.pw.encode('utf-8')):
         # Identity can be any data that is json serializable
-            access_token = create_access_token(identity=checkpw.id)
-            refresh_token = create_refresh_token(identity=checkpw.id)
+            access_token = create_access_token(identity=queried.id)
             print('ok')
-            return jsonify({'access_token':access_token, 'refresh_token':refresh_token, 'user_token': checkpw.id, 'status':400})
+            print(queried.id, queried.nickname)
+            user_object={
+                "id": queried.id,
+                "email": queried.email,
+                "nickname": queried.nickname,
+                "usertype": queried.usertype
+            }
+
+            return jsonify({
+                            'access_token':access_token,  
+                            'user_object':user_object,
+                            'status':400
+                        })
         else:
             return jsonify({"msg":"비밀번호 불일치", "status":401})

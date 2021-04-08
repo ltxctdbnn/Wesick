@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity, unset_jwt_cookies, create_refresh_token)
+
 import pymysql
 from flask_cors import CORS
 from pymongo import MongoClient
@@ -37,9 +38,7 @@ def create_app():
 
 # Setup the Flask-JWT-Extended extension
     app.config['JWT_SECRET_KEY'] = 'todaktodak token'
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(hours=20)
-
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=10)
     jwt = JWTManager(app)
 
     return app
