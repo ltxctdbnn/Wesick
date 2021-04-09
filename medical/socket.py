@@ -3,7 +3,7 @@ from flask import Flask
 
 # app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'dev'
-socketio = SocketIO(cors_allowed_origins="*")
+socketio = SocketIO(cors_allowed_origins="http://localhost:3000")
 
 
 @socketio.on('message', namespace='/chat')

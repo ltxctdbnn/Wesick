@@ -30,7 +30,7 @@ const Friend = () => {
           withCredentials: true,
         })
       console.log(response);
-      if (response.data.status === 300) {
+      if (response.data.status === 200) {
         window.location.replace(`/chat?name=${sessionStorage.userid}&room=${response.data.roomid}`);
       } else {
         alert('error');
