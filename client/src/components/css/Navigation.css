@@ -1,12 +1,9 @@
 #navigation-container {
-  width: 100%;
+  width: 1100px;
   height: 30px;
   padding: 10px;
   background-color: #eff3f7;
   border: 1px solid darkorange;
-}
-
-#navigation-container {
 }
 
 #navigation-container button {
