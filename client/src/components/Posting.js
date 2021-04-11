@@ -68,7 +68,6 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
 
   return (
     <div>
-      {console.log('return' + postingObj.date)}
       {editing ? (
         <>
           {isOwner && (

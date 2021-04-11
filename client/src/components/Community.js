@@ -37,7 +37,6 @@ const Community = () => {
       const response = await attachmentRef.putString(attachment, 'data_url');
       attachmentUrl = await response.ref.getDownloadURL();
     }
-    console.log(attachmentUrl);
     await axios
       .post(url + '/article/post', {
         method: 'POST',
