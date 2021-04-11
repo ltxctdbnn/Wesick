@@ -78,6 +78,7 @@ const Community = () => {
       })
       .catch(() => {
         alert('[READ] response (x)');
+        return 0;
       });
   };
 
@@ -131,6 +132,7 @@ const Community = () => {
             postingObj={posting}
             content={posting.content}
             isOwner={posting.userid === sessionStorage.userid}
+            onReadPosting={onReadPosting}
           />
         ))}
       </div>

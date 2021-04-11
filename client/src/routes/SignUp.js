@@ -13,6 +13,7 @@ function SignUp() {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [pwWarning, setPwWarning] = useState(<></>);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // (회원가입 폼) 입력 핸들러
   const onChangeHandler = (event) => {
