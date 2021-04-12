@@ -1,4 +1,4 @@
-#profile-register-container {
+/* #profile-register-container {
   width: 600px;
   height: 650px;
   padding-left: 50px;
@@ -30,7 +30,7 @@
 }
 
 #profile-photo input[type='file'] {
-  /* 파일 필드 숨기기 */
+  /* 파일 필드 숨기기
   position: absolute;
   width: 1px;
   height: 1px;
@@ -132,4 +132,4 @@
   border: 1px solid #ced4da;
   border-radius: 0.5rem;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
+}  */
