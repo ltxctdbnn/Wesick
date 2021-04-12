@@ -1,19 +1,18 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import SignIn from 'routes/SignIn';
-import SignUp from 'routes/SignUp';
-import Home from 'routes/Home';
-import Profile from 'routes/Profile';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import SignIn from "routes/SignIn";
+import SignUp from "routes/SignUp";
+import Home from "routes/Home";
+import Profile from "routes/Profile";
 
-import MyPage from 'routes/MyPage';
-import Navigation from './Navigation';
+import MyPage from "routes/MyPage";
+import Navigation from "./Navigation";
 
-import Chat from 'routes/Chat';
+import Chat from "routes/Chat";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
     <Router>
-
       {isLoggedIn && <Navigation />}
       <Switch>
         {isLoggedIn ? (
@@ -40,7 +39,6 @@ const AppRouter = ({ isLoggedIn }) => {
           </>
         )}
       </Switch>
-
     </Router>
   );
 };
