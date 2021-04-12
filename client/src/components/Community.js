@@ -4,7 +4,7 @@ import 'components/css/Community.css';
 
 // 커뮤니티 컴포넌트
 const Community = ({ postings }) => {
-  const [itemIndex, setItemIndex] = useState(1);
+  const [itemIndex, setItemIndex] = useState(0);
   const [result, setResult] = useState(postings.slice(0, 5));
 
   const _infiniteScroll = useCallback(() => {
