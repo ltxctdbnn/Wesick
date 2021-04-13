@@ -58,7 +58,7 @@ const signInStyles = makeStyles((theme) => ({
     zIndex: "1",
     background: "white",
     boxShadow: "0px 2px 10px lightgray",
-    borderRadius: "1rem",
+    borderRadius: "1.8rem",
     padding: theme.spacing(5.75),
     textAlign: "center",
     color: theme.palette.text.secondary,

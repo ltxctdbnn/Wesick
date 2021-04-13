@@ -39,7 +39,7 @@ const Community = () => {
       const response = await attachmentRef.putString(attachment, "data_url");
       attachmentUrl = await response.ref.getDownloadURL();
     }
-    console.log(attachmentUrl);
+
     await axios
       .post(url + "/article/post", {
         method: "POST",
@@ -69,9 +69,7 @@ const Community = () => {
     await axios
       .post(url + "/article/read", {
         method: "POST",
-        body: JSON.stringify({
-          currentPage: currentPage,
-        }),
+        body: JSON.stringify({ currentPage: currentPage }),
       })
       .then((response) => {
         console.log("[READ] 게시글 목록 Reloading");
