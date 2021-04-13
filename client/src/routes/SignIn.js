@@ -65,9 +65,10 @@ const signInStyles = makeStyles((theme) => ({
   },
 
   signInTitle: {
-    fontSize: "2.0vw",
+    color: "black",
+    fontSize: "1.6vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "1.5vh",
+    marginBottom: "2.2vh",
   },
 
   textField: {
@@ -85,6 +86,7 @@ const signInStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
+    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
@@ -101,6 +103,7 @@ const signInStyles = makeStyles((theme) => ({
     color: "gray",
     background: "white",
     border: "2px solid gray",
+    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "gray",

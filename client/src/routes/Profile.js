@@ -16,6 +16,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import { CancelScheduleSendSharp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +29,19 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     padding: theme.spacing(12),
+    textAlign: "center",
+  },
+
+  insidePaperHeader: {
+    height: theme.spacing(12),
+    // padding: theme.spacing(2),
+    paddingLeft: theme.spacing(5),
+    textAlign: "center",
+  },
+
+  insidePaper: {
+    // height: theme.spacing(11),
+    padding: theme.spacing(2),
     textAlign: "center",
   },
 
@@ -46,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Spoqa Han Sans Neo",
   },
 
-  profile: {
+  profileForm: {
     width: "35vw",
     position: "absolute",
     zIndex: "1",
@@ -71,27 +86,56 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paperIntro: {
-    width: "20vw",
-    height: "12vh",
+    padding: "1vw",
+    width: "15vw",
+    height: "10vh",
     border: "1px solid lightgray",
     borderRadius: "0.5rem",
   },
 
+  uploadProfile: {
+    paddingLeft: theme.spacing(5),
+    marginBottom: "1vh",
+  },
+
   uploadProfileImg: {
-    width: "7vw",
-    height: "14vh",
+    width: "6vw",
+    height: "11.5vh",
     color: "white",
     background: "lightgray",
-    marginRight: "2vw",
+    padding: "25px",
+    marginRight: "4vw",
+    border: "1px solid lightgray",
+    borderRadius: "5rem",
+    textAlign: "center",
+  },
+
+  prevImg: {
+    width: "6vw",
+    height: "11.5vh",
+    // padding: "25px",
+    border: "1px solid lightgray",
+    borderRadius: "5rem",
+    // textAlign: "center",
+  },
+
+  prevProfileImg: {
+    width: "5.5vw",
+    height: "11vh",
+    // color: "white",
+    // background: "lightgray",
+    padding: "25px",
+    marginRight: "4vw",
     border: "1px solid lightgray",
     borderRadius: "5rem",
     textAlign: "center",
   },
 
   profileTitle: {
-    fontSize: "2.0vw",
+    color: "black",
+    fontSize: "1.6vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "1.5vh",
+    marginBottom: "2.2vh",
   },
 
   TextField: {
@@ -130,6 +174,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
+    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
@@ -148,17 +193,12 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5rem",
   },
 
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
 
   formControl: {
-    margin: theme.spacing(1),
+    marginLeft: theme.spacing(4),
     minWidth: 120,
     maxWidth: 300,
   },
@@ -168,6 +208,40 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: 2,
+  },
+
+  subtitle: {
+    textAlign: "left",
+    width: "6vw",
+    fontSize: "0.9vw",
+    fontFamily: "Spoqa Han Sans Neo",
+    marginTop: "2vh",
+    marginBottom: "2vh",
+    marginLeft: "1.5vw",
+    marginRight: "3vw",
+  },
+
+  sub: {
+    display: "flex",
+  },
+
+  subInput: {
+    paddingTop: "0.1vh",
+    paddingBottom: "0.1vh",
+    marginTop: "2vh",
+    marginBottom: "2vh",
+    lineHeight: "1.5",
+    color: "#495057",
+    backgroundColor: "#fff",
+    backgroundClip: "padding-box",
+    border: "1px solid #ced4da",
+    borderRadius: "0.5rem",
+    transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
+  },
+
+  userData: {
+    marginLeft: "5vw",
+    // paddingLeft: "3.5vw",
   },
 }));
 
@@ -205,6 +279,7 @@ const Profile = () => {
   const [userLocation, setUserLocation] = useState("서울"); // 임시 샘플
   const [age, setAge] = useState("");
   const diseases = ["고혈압", "우울증", "탈모", "아토피", "당뇨", "비만"];
+
   // 프로필 사진 업로드 핸들러
   const onFileChange = (event) => {
     const {
@@ -341,11 +416,14 @@ const Profile = () => {
         </Grid>
         <Grid item xs={4}>
           <Grid item xs={12}>
-            <div className={classes.profile}>
-              <h2 className={classes.profileTitle}>프로필 작성</h2>
-              <div className={classes.paperProfile}>
-                <Grid container item xs={12} spacing={3}>
-                  <Grid item xs={4}>
+            <div className={classes.profileForm}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <h2 className={classes.profileTitle}>프로필 작성</h2>
+                </Grid>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={4}>
+                  <div className={classes.uploadProfile}>
                     <div className={classes.uploadProfileImg}>
                       <input
                         accept="image/*"
@@ -357,10 +435,10 @@ const Profile = () => {
                       {profilePhoto && (
                         <div>
                           <img
-                            className={classes.profileImg}
+                            className={classes.prevImg}
                             src={profilePhoto}
-                            width="150px"
-                            height="150px"
+                            width="50px"
+                            height="50px"
                           />
                           <button onClick={onClearProfilePhoto}>지우기</button>
                         </div>
@@ -378,107 +456,124 @@ const Profile = () => {
                         </label>
                       )}
                     </div>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <input
-                      className={classes.paperIntro}
-                      id="self-introduction-input"
-                      name="userIntroduction"
-                      type="text"
-                      placeholder="  소개말을 입력해주세요."
-                      onChange={onChangeHandler}
-                    />
-                  </Grid>
+                  </div>
                 </Grid>
-              </div>
-              <div className={classes.age}>
-                <h5>연령대</h5>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={age}
-                    onChange={onAgeChange}
-                  >
-                    <MenuItem value={10}>10대</MenuItem>
-                    <MenuItem value={20}>20대</MenuItem>
-                    <MenuItem value={30}>30대</MenuItem>
-                    <MenuItem value={40}>40대</MenuItem>
-                    <MenuItem value={50}>50대</MenuItem>
-                    <MenuItem value={60}>60대</MenuItem>
-                    <MenuItem value={70}>70대</MenuItem>
-                    <MenuItem value={80}>80대</MenuItem>
-                    <MenuItem value={90}>90대</MenuItem>
-                  </Select>
-                </FormControl>
-              </div>
-              <br />
-              <br />
-              <div className={classes.interest}>
-                <h5>관심질환 설정하기</h5>
-                <div>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
-                    <Select
-                      labelId="demo-mutiple-chip-label"
-                      id="demo-mutiple-chip"
-                      multiple
-                      value={userDiseases}
-                      onChange={handleChange}
-                      input={<Input id="select-multiple-chip" />}
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {selected.map((value) => (
-                            <Chip
-                              key={value}
-                              label={value}
-                              className={classes.chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {diseases.map((disease) => (
-                        <MenuItem
-                          key={disease}
-                          value={disease}
-                          style={getStyles(disease, userDiseases, theme)}
+                <Grid item xs={6}>
+                  <textarea
+                    className={classes.paperIntro}
+                    name="userIntroduction"
+                    cols="40"
+                    rows="5"
+                    placeholder="소개말을 입력해주세요."
+                    onChange={onChangeHandler}
+                  ></textarea>
+                </Grid>
+                <Grid item xs={1}></Grid>
+                <div className={classes.userData}>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={10}>
+                    <div className={classes.sub}>
+                      <h5 className={classes.subtitle}>연령대</h5>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-label">
+                          Age
+                        </InputLabel>
+                        <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          value={age}
+                          onChange={onAgeChange}
                         >
-                          {disease}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                          <MenuItem value={10}>10대</MenuItem>
+                          <MenuItem value={20}>20대</MenuItem>
+                          <MenuItem value={30}>30대</MenuItem>
+                          <MenuItem value={40}>40대</MenuItem>
+                          <MenuItem value={50}>50대</MenuItem>
+                          <MenuItem value={60}>60대</MenuItem>
+                          <MenuItem value={70}>70대</MenuItem>
+                          <MenuItem value={80}>80대</MenuItem>
+                          <MenuItem value={90}>90대</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={10}>
+                    <div className={classes.sub}>
+                      <h5 className={classes.subtitle}>관심질환</h5>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-mutiple-chip-label">
+                          Chip
+                        </InputLabel>
+                        <Select
+                          labelId="demo-mutiple-chip-label"
+                          id="demo-mutiple-chip"
+                          multiple
+                          value={userDiseases}
+                          onChange={handleChange}
+                          input={<Input id="select-multiple-chip" />}
+                          renderValue={(selected) => (
+                            <div className={classes.chips}>
+                              {selected.map((value) => (
+                                <Chip
+                                  key={value}
+                                  label={value}
+                                  className={classes.chip}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          MenuProps={MenuProps}
+                        >
+                          {diseases.map((disease) => (
+                            <MenuItem
+                              key={disease}
+                              value={disease}
+                              style={getStyles(disease, userDiseases, theme)}
+                            >
+                              {disease}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </div>
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={10}>
+                    <div className={classes.sub}>
+                      <h5 className={classes.subtitle}>우리동네</h5>
+                      <input className={classes.subInput} type="text" />
+                    </div>
+                  </Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={1}></Grid>
+                  <Grid item xs={10}>
+                    <div className={classes.sub}>
+                      <h5 className={classes.subtitle}>토닥터 인증</h5>
+                      <input
+                        id="doctor-validate-input"
+                        className={classes.subInput}
+                        type="file"
+                        accept=".pdf"
+                        onChange={onDoctorPdfChange}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={1}></Grid>
                 </div>
-              </div>
-              <br />
-              <br />
-              <div className={classes.location}>
-                <h5>우리동네 설정하기</h5>
-              </div>
-              <br />
-              <br />
-              <div className={classes.certification}>
-                <h5>토닥터 인증</h5>
-                <input
-                  id="doctor-validate-input"
-                  type="file"
-                  accept=".pdf"
-                  onChange={onDoctorPdfChange}
-                />
-              </div>
-              <br />
-              <br />
-              <Button
-                className={classes.ButtonRegister}
-                variant="contained"
-                size="large"
-                onClick={onSubmitProfile}
-              >
-                저장
-              </Button>
+                <Grid item xs={12}>
+                  <Button
+                    className={classes.ButtonRegister}
+                    variant="contained"
+                    size="large"
+                    onClick={onSubmitProfile}
+                  >
+                    저장
+                  </Button>
+                </Grid>
+              </Grid>
             </div>
           </Grid>
         </Grid>

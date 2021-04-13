@@ -57,16 +57,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
   signUpTitle: {
-    fontSize: "2.0vw",
+    color: "black",
+    fontSize: "1.6vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "1.5vh",
+    marginBottom: "2.2vh",
   },
 
   textField: {
-    width: "25vw",
+    width: "24vw",
     margin: "0.5vw",
     fontFamily: "Spoqa Han Sans Neo",
-    borderRadius: "0",
   },
 
   buttonRegister: {
@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
+    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
