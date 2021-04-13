@@ -1,27 +1,22 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import "routes/css/SignIn.css";
-import clsx from "clsx";
 import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
 axios.defaults.withCredentials = true;
 
-const useStyles = makeStyles((theme) => ({
+const signInStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
       flexGrow: 1,
@@ -34,55 +29,55 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
 
-  paperBody: {
+  body: {
     height: 350,
     padding: theme.spacing(2),
   },
 
-  paperLogo: {
-    marginBottom: "3vh",
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-
-  paperSlogan: {
-    fontSize: "1.5vw",
-    fontFamily: "Spoqa Han Sans Neo",
-  },
-
-  paperSignIn: {
-    width: "35vw",
-    position: "absolute",
-    zIndex: "1",
-    background: "white",
-    boxShadow: "5px 5px 5px gray",
-    borderRadius: "0.5rem",
-    padding: theme.spacing(5.75),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-
-  paperFooter: {
+  footer: {
     zIndex: "-1",
     marginTop: "10vh",
     padding: theme.spacing(0),
     background: "#f1f3f5",
   },
 
+  logo: {
+    marginBottom: "3vh",
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+
+  slogan: {
+    fontSize: "1.5vw",
+    fontFamily: "Spoqa Han Sans Neo",
+  },
+
+  signIn: {
+    width: "35vw",
+    position: "absolute",
+    zIndex: "1",
+    background: "white",
+    boxShadow: "0px 2px 10px lightgray",
+    borderRadius: "1rem",
+    padding: theme.spacing(5.75),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
+
   signInTitle: {
     fontSize: "2.0vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "2vh",
+    marginBottom: "1.5vh",
   },
 
-  TextField: {
+  textField: {
     width: "25vw",
     margin: "0.5vw",
     fontFamily: "Spoqa Han Sans Neo",
     borderRadius: "0",
   },
 
-  ButtonSignIn: {
+  buttonSignIn: {
     width: "10vw",
     margin: "1vw",
     fontFamily: "Spoqa Han Sans Neo",
@@ -98,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  ButtonSignUp: {
+  buttonSignUp: {
     width: "10vw",
     margin: "1vw",
     fontFamily: "Spoqa Han Sans Neo",
@@ -118,12 +113,11 @@ const useStyles = makeStyles((theme) => ({
 // 로그인 페이지
 function SignIn() {
   const url = `http://localhost:5000`;
-  const classes = useStyles();
+  const classes = signInStyles();
   const history = useHistory();
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [values, setValues] = useState({
-    password: "",
     showPassword: false,
   });
 
@@ -173,7 +167,6 @@ function SignIn() {
             "usertype",
             JSON.stringify(response.data.user_object.usertype)
           );
-
           window.location.replace("/");
         } else if (response.data.status === 401) {
           alert("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
@@ -186,12 +179,14 @@ function SignIn() {
       });
   };
 
+  // 회원가입 페이지 이동 핸들러
   const onMoveSignUp = () => {
     history.push({
       pathname: "/sign-up",
     });
   };
 
+  // 패스워드 입력 폼 관련 핸들러
   const handleChange = (prop) => (event) => {
     setUserPassword(event.target.value);
     setValues({ ...values, [prop]: event.target.value });
@@ -212,11 +207,11 @@ function SignIn() {
           <div className={classes.paper}></div>
         </Grid>
         <Grid item xs={2}>
-          <div className={classes.paperBody}></div>
+          <div className={classes.body}></div>
         </Grid>
         <Grid item xs={3}>
           <Grid item xs={12}>
-            <div className={classes.paperLogo}>
+            <div className={classes.logo}>
               <img
                 src="./images/todak_logo.png"
                 width="100%"
@@ -225,21 +220,21 @@ function SignIn() {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <div className={classes.paperSlogan}>
+            <div className={classes.slogan}>
               토닥토닥에서 우리 동네에 나와 같은 아픔을 가진 사람들과 따뜻한
               이야기를 나눠보세요.
             </div>
           </Grid>
         </Grid>
         <Grid item xs={1}>
-          <div className={classes.paperBody}></div>
+          <div className={classes.body}></div>
         </Grid>
         <Grid item xs={4}>
           <Grid item xs={12}>
-            <div className={classes.paperSignIn}>
+            <div className={classes.signIn}>
               <h2 className={classes.signInTitle}>로그인하기</h2>
               <TextField
-                className={classes.TextField}
+                className={classes.textField}
                 id="outlined-basic"
                 label="이메일"
                 variant="outlined"
@@ -251,7 +246,7 @@ function SignIn() {
                 required
               />
               <FormControl
-                className={clsx(classes.margin, classes.TextField)}
+                className={clsx(classes.margin, classes.textField)}
                 variant="outlined"
               >
                 <InputLabel htmlFor="outlined-adornment-password">
@@ -283,7 +278,7 @@ function SignIn() {
               </FormControl>
               <Button
                 // style={{ margin: "0 auto" }}
-                className={classes.ButtonSignUp}
+                className={classes.buttonSignUp}
                 variant="contained"
                 size="large"
                 onClick={onMoveSignUp}
@@ -291,7 +286,7 @@ function SignIn() {
                 회원가입
               </Button>
               <Button
-                className={classes.ButtonSignIn}
+                className={classes.buttonSignIn}
                 variant="contained"
                 size="large"
                 onClick={onSignInHandler}
@@ -302,10 +297,10 @@ function SignIn() {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          <div className={classes.paperBody}></div>
+          <div className={classes.body}></div>
         </Grid>
         <Grid item xs={12}>
-          <div className={classes.paperFooter}>
+          <div className={classes.footer}>
             <img src="./images/grass.png" width="100%" alt="Todak Logo" />
           </div>
         </Grid>

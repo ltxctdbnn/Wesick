@@ -16,14 +16,26 @@
 }
 
 #create-posting-container button {
-  width: 520px;
+  width: 500px;
   height: 40px;
-  border: 1px solid orange;
+  border: 1px solid#ff8a4e;
   border-radius: 0.5rem;
   margin-top: 5px;
   margin-bottom: 5px;
   background: white;
-  color: orange;
+  color: #ff8a4e;
+  font-size: 1em;
+}
+
+#create-posting-container button:hover {
+  width: 500px;
+  height: 40px;
+  border: 1px solid#ff8a4e;
+  border-radius: 0.5rem;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background: #ff8a4e;
+  color: white;
   font-size: 1em;
 }
 

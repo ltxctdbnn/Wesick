@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import PhotoCamera from "@material-ui/icons/PhotoCamera";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     zIndex: "1",
     background: "white",
-    boxShadow: "5px 5px 5px gray",
-    borderRadius: "0.5rem",
+    boxShadow: "0px 2px 10px lightgray",
+    borderRadius: "1rem",
     padding: theme.spacing(5.75),
     textAlign: "center",
     color: theme.palette.text.secondary,
@@ -55,10 +57,34 @@ const useStyles = makeStyles((theme) => ({
     background: "#f1f3f5",
   },
 
+  paperProfile: {
+    padding: theme.spacing(5),
+    textAlign: "center",
+  },
+
+  paperIntro: {
+    width: "20vw",
+    height: "12vh",
+    border: "1px solid lightgray",
+    borderRadius: "0.5rem",
+  },
+
+  uploadProfileImg: {
+    width: "7vw",
+    height: "14vh",
+    color: "white",
+    background: "lightgray",
+    marginRight: "2vw",
+    // padding: theme.spacing(),
+    border: "1px solid lightgray",
+    borderRadius: "5rem",
+    textAlign: "center",
+  },
+
   signInTitle: {
     fontSize: "2.0vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "2vh",
+    marginBottom: "1.5vh",
   },
 
   TextField: {
@@ -66,6 +92,28 @@ const useStyles = makeStyles((theme) => ({
     margin: "0.5vw",
     fontFamily: "Spoqa Han Sans Neo",
     borderRadius: "0",
+  },
+
+  interest: {
+    fontFamily: "Spoqa Han Sans Neo",
+    float: "left",
+    color: "dark",
+    marginLeft: "1.5vw",
+    fontWeight: "bold",
+  },
+
+  location: {
+    fontFamily: "Spoqa Han Sans Neo",
+    float: "left",
+    marginLeft: "1.5vw",
+    fontWeight: "bold",
+  },
+
+  certification: {
+    fontFamily: "Spoqa Han Sans Neo",
+    float: "left",
+    marginLeft: "1.5vw",
+    fontWeight: "bold",
   },
 
   ButtonRegister: {
@@ -82,6 +130,10 @@ const useStyles = makeStyles((theme) => ({
       color: "white",
       boxShadow: "none",
     },
+  },
+
+  input: {
+    display: "none",
   },
 }));
 
@@ -121,65 +173,6 @@ const Profile = () => {
   };
 
   return (
-    // <div
-    //   style={{
-    //     display: 'flex',
-    //     justifyContent: 'center',
-    //     alignItems: 'center',
-    //     width: '100%',
-    //     height: '100vh',
-    //   }}
-    // >
-    //   <div id="profile-register-container">
-    //     <div className="profile-register-header">
-    //       <h1>프로필 작성</h1>
-    //     </div>
-    //     <div id="profile-register-body">
-    //       <div id="profile-photo">
-    //         <label for="profile-photo-input">
-    //           사진 업로드
-    //           <input
-    //             id="profile-photo-input"
-    //             type="file"
-    //             accept="image/*"
-    //             onChange={onFileChange}
-    //           />
-    //         </label>
-    //         <input id="self-introduction-input" type="text" placeholder="소개말을 입력해주세요." />
-    //         {profilePhoto && (
-    //           <div>
-    //             <img src={profilePhoto} width="200px" height="150px" />
-    //             <button onClick={onClearAttachment}>지우기</button>
-    //           </div>
-    //         )}
-    //       </div>
-    //       <br />
-    //       <div>
-    //         <h3>관심질환 설정하기</h3>
-    //         <span>고혈압 </span>
-    //         <span>다이어트 </span>
-    //         <span>당뇨 </span>
-    //         <span>운동 </span>
-    //       </div>
-    //       <br />
-    //       <div>
-    //         <h3>우리동네 설정하기</h3>
-    //         <input id="address-input" type="text" placeholder="거주지 주소를 입력해주세요." />
-    //       </div>
-    //       <br />
-    //       <div id="doctor-validate">
-    //         <h3>토닥터 인증</h3>
-    //         <label for="doctor-validate-input">
-    //           의사 면허증을 업로드해주세요. (.pdf 파일 형식만 가능)
-    //           <input id="doctor-validate-input" type="file" accept=".pdf" />
-    //         </label>
-    //       </div>
-    //     </div>
-    //     <div id="profile-register-footer">
-    //       <button onClick={onSave}>저장</button>
-    //     </div>
-    //   </div>
-    // </div>
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
@@ -212,66 +205,57 @@ const Profile = () => {
           <Grid item xs={12}>
             <div className={classes.paperSignUp}>
               <h2 className={classes.signInTitle}>프로필 작성</h2>
-              {/* <TextField
-                className={classes.TextField}
-                id="outlined-basic"
-                label="이메일을 입력해주세요"
-                variant="outlined"
-                name="email"
-                type="email"
-                value={email}
-                onChange={onChangeHandler}
-                required
-              />
-              <TextField
-                className={classes.TextField}
-                id="outlined-basic"
-                label="비밀번호를 입력해주세요"
-                variant="outlined"
-                name="password"
-                type="password"
-                value={password}
-                onChange={onChangeHandler}
-                required
-              />
-              <TextField
-                className={classes.TextField}
-                id="outlined-basic"
-                label="비밀번호 확인"
-                variant="outlined"
-                name="passwordCheck"
-                type="password"
-                value={passwordCheck}
-                onChange={onChangeHandler}
-                required
-              />
-              <TextField
-                className={classes.TextField}
-                id="outlined-basic"
-                label="이름을 입력해주세요"
-                variant="outlined"
-                name="name"
-                type="text"
-                value={name}
-                onChange={onChangeHandler}
-                required
-              />
-              <TextField
-                className={classes.TextField}
-                id="outlined-basic"
-                label="닉네임을 입력해주세요"
-                variant="outlined"
-                name="nickname"
-                type="text"
-                value={nickname}
-                onChange={onChangeHandler}
-                required
-              /> */}
+              <div className={classes.paperProfile}>
+                <Grid container item xs={12} spacing={3}>
+                  <Grid item xs={4}>
+                    <div className={classes.uploadProfileImg}>
+                      <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="icon-button-file"
+                        type="file"
+                      />
+                      <label htmlFor="icon-button-file">
+                        <IconButton
+                          aria-label="upload picture"
+                          component="span"
+                        >
+                          <PhotoCamera />
+                        </IconButton>
+                      </label>
+                    </div>
+                  </Grid>
+                  <Grid item xs={8}>
+                    <input
+                      className={classes.paperIntro}
+                      id="self-introduction-input"
+                      type="text"
+                      placeholder="  소개말을 입력해주세요."
+                    />
+                  </Grid>
+                </Grid>
+              </div>
+              <div className={classes.interest}>
+                <h5>관심질환 설정하기</h5>
+              </div>
+              <br />
+              <br />
+              <div className={classes.location}>
+                <h5>우리동네 설정하기</h5>
+              </div>
+              <br />
+              <br />
+              <div className={classes.certification}>
+                <h5>토닥터 인증</h5>
+                <input id="doctor-validate-input" type="file" accept=".pdf" />
+              </div>
+              <br />
+              <br />
               <Button
                 className={classes.ButtonRegister}
                 variant="contained"
                 size="large"
-                // onClick={onSignUpHandler}
+                onClick={onSave}
               >
                 저장
               </Button>

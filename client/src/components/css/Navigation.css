@@ -1,9 +1,9 @@
 #navigation-container {
   width: 100%;
-  height: 30px;
+  height: 6vh;
   padding: 10px;
-  background-color: #eff3f7;
-  border: 1px solid darkorange;
+  background-color: white;
+  border: 1px solid #ff8a4e;
 }
 
 #navigation-container {
@@ -14,7 +14,7 @@
   padding-top: 5px;
   font-size: 15px;
   margin-left: 10px;
-  color: darkorange;
-  background: #eff3f7;
+  color: #ff8a4e;
+  background: white;
   border: none;
 }
