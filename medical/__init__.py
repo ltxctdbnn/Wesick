@@ -40,7 +40,6 @@ def create_app():
     app.register_blueprint(chat.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(community.bp)
-    app.register_blueprint(chat.bp)
     bcrypt = Bcrypt(app)
 
 

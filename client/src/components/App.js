@@ -9,8 +9,8 @@ axios.defaults.withCredentials = true;
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState("");
 
+  // 로그인 되어 있는 상태인지 확인
   useEffect(() => {
-    // 로그인 되어 있는 상태인지 확인
     setIsLoggedIn(sessionStorage.userid);
   }, []);
 

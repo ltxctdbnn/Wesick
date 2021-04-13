@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
@@ -38,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Spoqa Han Sans Neo",
   },
 
-  paperSignUp: {
+  profile: {
     width: "35vw",
     position: "absolute",
     zIndex: "1",
@@ -75,13 +73,12 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     background: "lightgray",
     marginRight: "2vw",
-    // padding: theme.spacing(),
     border: "1px solid lightgray",
     borderRadius: "5rem",
     textAlign: "center",
   },
 
-  signInTitle: {
+  profileTitle: {
     fontSize: "2.0vw",
     fontFamily: "Spoqa Han Sans Neo",
     marginBottom: "1.5vh",
@@ -91,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
     width: "25vw",
     margin: "0.5vw",
     fontFamily: "Spoqa Han Sans Neo",
-    borderRadius: "0",
   },
 
   interest: {
@@ -135,9 +131,14 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+
+  profileImg: {
+    border: "2px solid black",
+    borderRadius: "5rem",
+  },
 }));
 
-// 프로필 작성 컴포넌트 (미완성)
+// 프로필 작성 컴포넌트
 const Profile = () => {
   const url = `http://localhost:5000`;
   const classes = useStyles();
@@ -163,7 +164,7 @@ const Profile = () => {
   };
 
   // 프로필 사진 Clear 핸들러
-  const onClearAttachment = () => setProfilePhoto(null);
+  const onClearProfilePhoto = () => setProfilePhoto(null);
 
   // 작성 프로필 저장 핸들러
   const onSave = () => {
@@ -203,8 +204,8 @@ const Profile = () => {
         </Grid>
         <Grid item xs={4}>
           <Grid item xs={12}>
-            <div className={classes.paperSignUp}>
-              <h2 className={classes.signInTitle}>프로필 작성</h2>
+            <div className={classes.profile}>
+              <h2 className={classes.profileTitle}>프로필 작성</h2>
               <div className={classes.paperProfile}>
                 <Grid container item xs={12} spacing={3}>
                   <Grid item xs={4}>
@@ -214,7 +215,19 @@ const Profile = () => {
                         className={classes.input}
                         id="icon-button-file"
                         type="file"
+                        onChange={onFileChange}
                       />
+                      {profilePhoto && (
+                        <div>
+                          <img
+                            className={classes.profileImg}
+                            src={profilePhoto}
+                            width="150px"
+                            height="150px"
+                          />
+                          <button onClick={onClearProfilePhoto}>지우기</button>
+                        </div>
+                      )}
                       <label htmlFor="icon-button-file">
                         <IconButton
                           aria-label="upload picture"

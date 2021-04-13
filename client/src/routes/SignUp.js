@@ -130,31 +130,33 @@ function SignUp() {
   const onSignUpHandler = async (event) => {
     event.preventDefault();
     if (password === passwordCheck) {
-      try {
-        const response = await axios.post(url + "/sign-up", {
-          headers: { "Content-Type": "application/json" },
-          data: {
+      await axios
+        .post(url + "/sign-up", {
+          method: "POST",
+          body: JSON.stringify({
             email: email,
             password: password,
             name: name,
             nickname: nickname,
-          },
+          }),
           withCredentials: true,
-        });
-        if (response.data.status === 300) {
-          window.location.replace("/profile");
-        } else if (response.data.status === 301) {
-          alert("필수 입력 사항이 모두 입력되지 않았습니다.");
-        } else if (response.data.status === 302) {
-          alert("이미 등록된 이메일 주소입니다.");
-        } else if (response.data.status === 303) {
-          alert("이미 등록된 별명입니다.");
-        } else {
+        })
+        .then((response) => {
+          if (response.data.status === 300) {
+            window.location.replace("/profile");
+          } else if (response.data.status === 301) {
+            alert("필수 입력 사항이 모두 입력되지 않았습니다.");
+          } else if (response.data.status === 302) {
+            alert("이미 등록된 이메일 주소입니다.");
+          } else if (response.data.status === 303) {
+            alert("이미 등록된 별명입니다.");
+          } else {
+            alert("error");
+          }
+        })
+        .catch((error) => {
           alert("error");
-        }
-      } catch (error) {
-        alert("error");
-      }
+        });
     }
   };
 

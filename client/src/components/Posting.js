@@ -4,7 +4,7 @@ import "components/css/Posting.css";
 import { storageService } from "fBase";
 
 // 포스트 카드 컴포넌트
-const Posting = ({ postingObj, content, isOwner }) => {
+const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
   const url = `http://localhost:5000`;
   const [editing, setEditing] = useState(false);
   const [newPosting, setNewPosting] = useState(postingObj.content);
@@ -25,7 +25,7 @@ const Posting = ({ postingObj, content, isOwner }) => {
       })
       .then(() => {
         console.log("[UPDATE] 게시글 수정");
-        window.location.replace("/community");
+        onReadPosting();
       })
       .catch(() => {
         alert("[UPDATE] response (x)");
@@ -36,7 +36,6 @@ const Posting = ({ postingObj, content, isOwner }) => {
   // [DELETE] 게시글 삭제 핸들러
   const onDeletePosting = async () => {
     const ok = window.confirm("삭제하시겠습니까?");
-    console.log(ok);
     if (ok) {
       await axios
         .post(url + "/article/delete", {
@@ -47,12 +46,14 @@ const Posting = ({ postingObj, content, isOwner }) => {
         })
         .then(() => {
           console.log("[DELETE] 게시글 삭제");
-          window.location.replace("/community");
+          onReadPosting();
         })
         .catch(() => {
           alert("[DELETE] response (x)");
         });
-      await storageService.refFromURL(postingObj.attachmentUrl).delete();
+      if (postingObj.attachmentUrl) {
+        await storageService.refFromURL(postingObj.attachmentUrl).delete();
+      }
     }
   };
 

@@ -17,12 +17,12 @@ def home():
     return 'community page ok'
 
 
-@bp.route('/friend', methods=['GET'])
-def friend():
+@bp.route('/chatlist', methods=['GET'])
+def chatlist():
     users = models.User.query.all()
-    userlist = []
+    userlist = {}
     for user in users:
-        userlist.append([user.id, user.name])
+        userlist[user.id] = user.name
 
     return jsonify({"users": userlist})
 
@@ -63,10 +63,14 @@ def room():
             models.db.session.commit()
 
             roominfo2 = models.Channel.query.filter_by(
-            user_one=lst[0], user_two=lst[1]).first()
-
+                user_one=lst[0], user_two=lst[1]).first()
+            print(
+                f'room == {roominfo2}, user_one == {user1}, user_two == {user2}')
             return jsonify({"msg": "방 생성 성공", "roomid": roominfo2.id, 'status': 300})
         else:
             roomid = roominfo.id
+
+            print(
+                f'room == {roomid}, user_one == {lst[0]}, user_two == {lst[1]}')
 
             return jsonify({"roomid": roomid, "status": 300})
