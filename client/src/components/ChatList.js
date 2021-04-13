@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Chat from "routes/Chat";
+import { Link } from "react-router-dom";
+// import Chat from "routes/Chat";
 
 const url = `http://localhost:5000`;
 
@@ -16,29 +17,31 @@ const ChatList = () => {
     console.log("keys: ", Object.keys(response.data.users));
   }
 
-  const enterRoom = async (targetUser) => {
-    const response = await axios.post(url + "/room", {
-      headers: { "Content-Type": "application/json" },
-      data: {
-        user1: sessionStorage.userid,
-        user2: targetUser,
-      },
-      withCredentials: true,
-    });
-    console.log(response);
-    if (response.data.status === 300) {
-      setRoom(response.data.roomid);
-    } else {
-      alert("방 참여에 실패");
-    }
-  };
+  // const enterRoom = async (targetUser) => {
+    // const response = await axios.post(url + "/room", {
+    //   headers: { "Content-Type": "application/json" },
+    //   data: {
+    //     user1: sessionStorage.userid,
+    //     user2: targetUser,
+    //   },
+    //   withCredentials: true,
+    // });
+    // console.log(response);
+    // if (response.data.status === 300) {
+    //   setRoom(response.data.roomid);
+    // } else {
+    //   alert("방 참여에 실패");
+    // }
+  // };
 
   const userName = Object.keys(users).map((id) => (
     <li key={id}>
-      <button key={id} onClick={() => enterRoom(id)}>
+      {/* <button key={id} onClick={() => enterRoom(id)}> */}
+      <Link to="/chattest">
         {" "}
         {users[id]}{" "}
-      </button>
+      </Link>
+      {/* </button> */}
     </li>
   ));
 
@@ -49,7 +52,7 @@ const ChatList = () => {
       <div>
         <button onClick={onUserHandler}>유저 불러오기</button>
       </div>
-      {room > 0 ? <Chat room={room} /> : ""}
+      {/* {room > 0 ? <Chat room={room} /> : ""} */}
     </>
   );
 };

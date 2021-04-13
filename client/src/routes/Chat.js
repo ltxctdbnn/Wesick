@@ -30,7 +30,7 @@ const Chat = ({ room }) => {
   const onClick = () => {
     socketIO.current.emit("sendMessage", {
       message: messageRef.current.value,
-      name: sessionStorage.userid,
+      nickname: sessionStorage.nickname,
       room: room,
     });
     messageRef.current.value = "";

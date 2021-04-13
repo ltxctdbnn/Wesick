@@ -8,7 +8,8 @@ import Profile from "routes/Profile";
 import MyPage from "routes/MyPage";
 import Navigation from "./Navigation";
 
-import Chat from "routes/Chat";
+// import Chat from "routes/Chat";
+import Chattest from "routes/Chattest";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
@@ -23,7 +24,7 @@ const AppRouter = ({ isLoggedIn }) => {
             <Route exact path="/mypage">
               <MyPage />
             </Route>
-            <Route exact path="/chat" component={Chat} />
+            <Route exact path="/chattest" component={Chattest} />
           </>
         ) : (
           <>

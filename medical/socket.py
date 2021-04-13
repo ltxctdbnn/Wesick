@@ -21,7 +21,7 @@ def on_join(data):
 
 @socketio.on('sendMessage')
 def send_message(data):
-    message = data['message']
+    message = data['nickname'].replace('"', "") + ": " + data['message']
     room = data['room']
 
     print("sendMessage",  message, data)
