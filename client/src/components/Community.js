@@ -5,7 +5,9 @@ import axios from "axios";
 import { storageService } from "fBase";
 import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
+// import Grid from "@material-ui/core/Grid";
+import { Grid, Paper } from "@material-ui/core";
+import { Container, Col, Row, Card } from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +68,8 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid lightgray",
   },
   postings: {
+    // position: "absolute",
+    // width: "100%",
     height: theme.spacing(130),
     padding: theme.spacing(1),
     textAlign: "center",
@@ -204,75 +208,89 @@ const Community = () => {
     //   <button onClick={onCreatePosting}>글 올리기</button>
     // </form>
     //   </div>
-    //   <div className="postings-container">
-    //     {postings.map((posting) => (
-    //       <Posting
-    //         key={posting.date}
-    //         postingObj={posting}
-    //         content={posting.content}
-    //         isOwner={posting.userid === sessionStorage.userid}
-    //         onReadPosting={onReadPosting}
-    //       />
-    //     ))}
-    //   </div>
+    // <div className="postings-container">
+    //   {postings.map((posting) => (
+    //     <Posting
+    //       key={posting.date}
+    //       postingObj={posting}
+    //       content={posting.content}
+    //       isOwner={posting.userid === sessionStorage.userid}
+    //       onReadPosting={onReadPosting}
+    //     />
+    //   ))}
     // </div>
-    <div className={classes.root}>
+    // </div>
+    <Paper style={{ width: "100%", border: "none" }}>
       <Grid container spacing={0}>
         <Grid item xs={12}>
-          <div className={classes.paper}>
-            <Grid container spacing={0}>
+          <Grid container spacing={0}>
+            <Paper
+              style={{ border: "1px solid lightgray ", marginBottom: "15px" }}
+            >
               <Grid item xs={12}>
-                <div className={classes.newPosting}>
-                  <Grid container spacing={0}>
-                    <Grid item xs={12}>
-                      <div className={classes.newPostingTitle}>새 글쓰기</div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <div className={classes.newPostingCreate}>
-                        <textarea
-                          className={classes.newPostingInput}
-                          cols="40"
-                          rows="5"
-                          type="text"
-                          value={posting}
-                          onChange={onPosting}
-                          placeholder="내용을 입력하세요."
-                          maxLength={120}
-                        ></textarea>
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <div className={classes.newPostingFile}>
-                        <input
-                          className={classes.attachmentInput}
-                          type="file"
-                          accept="image/*"
-                          onChange={onFileChange}
-                        />
-                        {/* {attachment && (
+                <Grid container spacing={0}>
+                  <Grid item xs={12}></Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    style={{ borderBottom: "1px solid lightgray" }}
+                  >
+                    <p style={{ float: "left", padding: "10px", margin: "0" }}>
+                      새글쓰기
+                    </p>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <textarea
+                      cols="40"
+                      rows="5"
+                      type="text"
+                      value={posting}
+                      onChange={onPosting}
+                      placeholder="내용을 입력하세요."
+                      maxLength={120}
+                      style={{
+                        padding: "16px",
+                        width: "100%",
+                        height: "100%",
+                        border: "none",
+                      }}
+                    ></textarea>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <input
+                      className={classes.attachmentInput}
+                      type="file"
+                      accept="image/*"
+                      onChange={onFileChange}
+                    />
+                    {/* {attachment && (
                           <div>
                             <img src={attachment} width="100%" height="100%" />
                             <button onClick={onClearAttachment}>지우기</button>
                           </div>
                         )} */}
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <div className={classes.newPostingBtn}>
-                        <button onClick={onCreatePosting}>글 올리기</button>
-                      </div>
-                    </Grid>
                   </Grid>
-                </div>
+                  <Grid item xs={12}>
+                    <button onClick={onCreatePosting}>글 올리기</button>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <div className={classes.postings}>커뮤니티</div>
-              </Grid>
+            </Paper>
+            <Grid item xs={12}>
+              {postings.map((posting) => (
+                <Posting
+                  key={posting.date}
+                  postingObj={posting}
+                  content={posting.content}
+                  isOwner={posting.userid === sessionStorage.userid}
+                  onReadPosting={onReadPosting}
+                />
+              ))}
             </Grid>
-          </div>
+          </Grid>
         </Grid>
       </Grid>
-    </div>
+    </Paper>
   );
 };
 

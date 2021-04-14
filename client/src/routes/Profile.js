@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { storageService } from "fBase";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { Button, Avatar } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
@@ -99,14 +99,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   uploadProfileImg: {
-    width: "6vw",
-    height: "11.5vh",
+    width: "12vw",
+    height: "112vh",
     color: "white",
     background: "lightgray",
     padding: "25px",
     marginRight: "4vw",
     border: "1px solid lightgray",
-    borderRadius: "5rem",
     textAlign: "center",
   },
 
@@ -424,38 +423,31 @@ const Profile = () => {
                 <Grid item xs={1}></Grid>
                 <Grid item xs={4}>
                   <div className={classes.uploadProfile}>
-                    <div className={classes.uploadProfileImg}>
-                      <input
-                        accept="image/*"
-                        className={classes.input}
-                        id="icon-button-file"
-                        type="file"
-                        onChange={onFileChange}
-                      />
-                      {profilePhoto && (
-                        <div>
-                          <img
-                            className={classes.prevImg}
-                            src={profilePhoto}
-                            width="50px"
-                            height="50px"
-                          />
-                          <button onClick={onClearProfilePhoto}>지우기</button>
-                        </div>
-                      )}
-                      {profilePhoto ? (
-                        <></>
-                      ) : (
-                        <label htmlFor="icon-button-file">
-                          <IconButton
-                            aria-label="upload picture"
-                            component="span"
-                          >
-                            <PhotoCamera />
-                          </IconButton>
-                        </label>
-                      )}
-                    </div>
+                    <Avatar src={profilePhoto} width="200px" height="200px" />
+                    <input
+                      accept="image/*"
+                      className={classes.input}
+                      id="icon-button-file"
+                      type="file"
+                      onChange={onFileChange}
+                    />
+                    {profilePhoto && (
+                      <div>
+                        <button onClick={onClearProfilePhoto}>지우기</button>
+                      </div>
+                    )}
+                    {profilePhoto ? (
+                      <></>
+                    ) : (
+                      <label htmlFor="icon-button-file">
+                        <IconButton
+                          aria-label="upload picture"
+                          component="span"
+                        >
+                          <PhotoCamera />
+                        </IconButton>
+                      </label>
+                    )}
                   </div>
                 </Grid>
                 <Grid item xs={6}>

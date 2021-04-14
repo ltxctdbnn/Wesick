@@ -161,9 +161,7 @@ const Home = () => {
           <div className={classes.surrounding}>주변 토닥터, 우리동네</div>
         </Grid>
         <Grid item xs={6}>
-          <div className={classes.community}>
-            <Community />
-          </div>
+          <Community />
         </Grid>
         <Grid item xs={3}>
           <div className={classes.chatting}>
