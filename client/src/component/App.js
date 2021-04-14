@@ -14,8 +14,7 @@ export default function App() {
 
     return (
         <>
-        <h1>hello</h1>
-            {/* <AppRouter isLoggedIn={Boolean(isLoggedIn)} /> */}
+            <AppRouter isLoggedIn={Boolean(isLoggedIn)} />
         </>
     )
 }

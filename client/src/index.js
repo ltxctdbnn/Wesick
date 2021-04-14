@@ -1,17 +1,8 @@
 import React from 'react';
-import store from './store';
-import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
-import App from './component/App';
-import './index.css'
+import './index.css';
+import Root from './Root';
 
-const render = () => {
-  ReactDOM.render(
-    <Provider store={store}>
-      <App />
-    </Provider>,
-    document.getElementById('root')
-  )
-};
 
-export default render;
+ReactDOM.render(<Root />, document.getElementById('root'));
+
