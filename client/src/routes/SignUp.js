@@ -72,7 +72,6 @@ function SignUp() {
             alert('error');
           }
         }
-
         catch(error) {
           alert('error');
         };
