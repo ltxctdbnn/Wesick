@@ -11,7 +11,7 @@ import pymysql
 from flask_cors import CORS
 from pymongo import MongoClient
 
-from .socket import socketio
+# from .socket import socketio
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -32,16 +32,16 @@ def create_app():
     # cors
     CORS(app, supports_credentials=True)
 
-    socketio.init_app(app)
+    
     # 블루프린트
 # --------------------------------------------------------------------------- #
-    from .views import auth, community, chat
+    from .views import auth, community, chat, socket
 
     app.register_blueprint(chat.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(community.bp)
     bcrypt = Bcrypt(app)
-
+    socket.socketio.init_app(app)
 
 # Setup the Flask-JWT-Extended extension
     app.config['JWT_SECRET_KEY'] = 'todaktodak token'

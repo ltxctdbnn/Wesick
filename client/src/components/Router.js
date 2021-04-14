@@ -9,7 +9,7 @@ import MyPage from "routes/MyPage";
 import Navigation from "./Navigation";
 
 // import Chat from "routes/Chat";
-import Chattest from "routes/Chattest";
+import Chat from "routes/Chat";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
@@ -24,7 +24,7 @@ const AppRouter = ({ isLoggedIn }) => {
             <Route exact path="/mypage">
               <MyPage />
             </Route>
-            <Route exact path="/chattest" component={Chattest} />
+            <Route exact path="/chat" component={Chat} />
           </>
         ) : (
           <>
