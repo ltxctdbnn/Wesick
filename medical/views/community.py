@@ -34,7 +34,8 @@ def create_article():
     content=body['content']
     attachmentUrl=body['attachmentUrl']
 
-
+    profilephoto=models.Userprofile.query.filter_by(userid=userid).first()
+    
     date=(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     print(content, date,type(userid))
     community = mycol.insert_one({ 
@@ -44,7 +45,8 @@ def create_article():
                                     "usertype": usertype,
                                     "content":content,
                                     "attachmentUrl":attachmentUrl,
-                                    "date":date
+                                    "date":date,
+                                    "profilephotourl": profilephoto.profilephotourl
                                 })
     print('creat_ok')
     return jsonify({"msg": "글생성 성공", 'status': 200})
@@ -64,18 +66,12 @@ def read_article():
                 "usertype":m["usertype"],
                 "content":m["content"],
                 "attachmentUrl": m["attachmentUrl"],
-                "date":m["date"]
+                "date":m["date"],
+                "profilephotourl": m['profilephotourl']
                 })
         print('read.ok')
         return jsonify(lst)
 
-#     else:
-#         body=literal_eval(request.get_json()['body'])
-#         print(body)
-#         # currentPage
-#         # article = list(models.mycol.find())
-#         # print(article)
-#         return jsonify({})
 
 #수정버튼 클릭
 @bp.route('/article/update', methods=['POST'])
