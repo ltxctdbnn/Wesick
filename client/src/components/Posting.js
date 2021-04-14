@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import 'components/css/Posting.css';
-import { storageService } from 'fBase';
+import React, { useState } from "react";
+import axios from "axios";
+import "components/css/Posting.css";
+import { storageService } from "fBase";
 
 // 포스트 카드 컴포넌트
-const Posting = ({ postingObj, content, isOwner }) => {
+const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
   const url = `http://localhost:5000`;
   const [editing, setEditing] = useState(false);
   const [newPosting, setNewPosting] = useState(postingObj.content);
@@ -16,44 +16,44 @@ const Posting = ({ postingObj, content, isOwner }) => {
   const onUpdatePosting = async (event) => {
     event.preventDefault();
     await axios
-      .post(url + '/article/update', {
-        method: 'POST',
+      .post(url + "/article/update", {
+        method: "POST",
         body: JSON.stringify({
           postingId: postingObj.date,
           editContent: newPosting,
         }),
       })
       .then(() => {
-        console.log('[UPDATE] 게시글 수정');
-        window.location.replace('/community');
+        console.log("[UPDATE] 게시글 수정");
+        onReadPosting();
       })
       .catch(() => {
-        alert('[UPDATE] response (x)');
+        alert("[UPDATE] response (x)");
       });
     setEditing(false);
   };
 
   // [DELETE] 게시글 삭제 핸들러
   const onDeletePosting = async () => {
-    const ok = window.confirm('삭제하시겠습니까?');
-    console.log(ok);
+    const ok = window.confirm("삭제하시겠습니까?");
     if (ok) {
       await axios
-        .post(url + '/article/delete', {
-          method: 'POST',
+        .post(url + "/article/delete", {
+          method: "POST",
           body: JSON.stringify({
             postingId: postingObj.date,
           }),
         })
         .then(() => {
-          console.log('[DELETE] 게시글 삭제');
-          window.location.replace('/community');
+          console.log("[DELETE] 게시글 삭제");
+          onReadPosting();
         })
         .catch(() => {
-          alert('[DELETE] response (x)');
+          alert("[DELETE] response (x)");
         });
-      // Firebase Storage에서 삭제
-      await storageService.refFromURL(postingObj.attachmentUrl).delete();
+      if (postingObj.attachmentUrl) {
+        await storageService.refFromURL(postingObj.attachmentUrl).delete();
+      }
     }
   };
 
@@ -92,12 +92,18 @@ const Posting = ({ postingObj, content, isOwner }) => {
       ) : (
         <>
           <div id="posting-container">
-            <div className="posting-header-container">유저 타입: {postingObj.usertype}</div>
+            <div className="posting-header-container">
+              유저 타입: {postingObj.usertype}
+            </div>
             <div className="posting-body-container">
               <div className="posting-content">글 내용: {content}</div>
               {postingObj.attachmentUrl && (
                 <div className="posting-attachment">
-                  <img src={postingObj.attachmentUrl} width="500px" height="500px" />
+                  <img
+                    src={postingObj.attachmentUrl}
+                    width="500px"
+                    height="500px"
+                  />
                 </div>
               )}
             </div>

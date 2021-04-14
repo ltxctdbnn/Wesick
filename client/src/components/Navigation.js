@@ -1,20 +1,22 @@
-import React from 'react';
-import 'components/css/Navigation.css';
+import React from "react";
+import "components/css/Navigation.css";
 
 // 네비게이션 컴포넌트
 const Navigation = () => {
   // 로그아웃 핸들러
   const onLogOut = () => {
     sessionStorage.clear();
-    window.location.replace('/');
+    window.location.replace("/");
   };
 
+  // 마이페이지 이동 핸들러
   const onMoveMyPage = () => {
-    window.location.replace('/mypage');
+    window.location.replace("/mypage");
   };
 
+  // 메인 페이지 이동 핸들러
   const onMoveHome = () => {
-    window.location.replace('/');
+    window.location.replace("/");
   };
 
   return (

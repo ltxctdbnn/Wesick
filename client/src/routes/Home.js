@@ -1,9 +1,6 @@
-import React from 'react';
-
-import Community from 'components/Community';
-import Friend from 'components/Friend';
-import Navigation from 'components/Navigation';
-
+import React from "react";
+import Community from "components/Community";
+import ChatList from "components/ChatList";
 
 // 홈 페이지
 const Home = () => {
@@ -17,7 +14,7 @@ const Home = () => {
         <Community />
       </div>
       <div>
-        <Friend />
+        <ChatList />
       </div>
     </div>
   );
