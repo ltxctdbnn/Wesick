@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import 'components/css/Posting.css';
-import { storageService } from 'fBase';
+import { storageService } from '../fBase';
 
 // 포스트 카드 컴포넌트
 const Posting = ({ postingObj, content, isOwner }) => {

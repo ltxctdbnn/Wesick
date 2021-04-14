@@ -1,5 +1,4 @@
 import React from 'react';
-import 'components/css/Navigation.css';
 
 // 네비게이션 컴포넌트
 const Navigation = () => {

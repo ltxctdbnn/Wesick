@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Posting from 'components/Posting';
-import 'components/css/Community.css';
+import Posting from './Posting';
 import axios from 'axios';
-import { storageService } from 'fBase';
+// For Firebase
+import { storageService } from '../fBase';
+// Firebase 이미지 저장을 위한 난수 생성
 import { v4 as uuidv4 } from 'uuid';
 
 // 커뮤니티 컴포넌트
