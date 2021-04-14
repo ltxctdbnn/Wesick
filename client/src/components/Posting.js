@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "components/css/Posting.css";
 import { storageService } from "fBase";
@@ -6,13 +6,64 @@ import { storageService } from "fBase";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 import { Container, Col, Row, Card } from "react-bootstrap";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Favorite from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 // 포스트 카드 컴포넌트
 const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
   const url = `http://localhost:5000`;
   const [editing, setEditing] = useState(false);
   const [newPosting, setNewPosting] = useState(postingObj.content);
+  const [likeState, setLikeState] = useState(false);
   const [like, setLike] = useState(0);
+
+  // 새 게시글 작성 후 글 올리기하면 호출
+  useEffect(() => {
+    console.log(likeState);
+    if (likeState === true) {
+      onClickLike();
+    } else {
+      onCancelLike();
+    }
+  }, [likeState]);
+
+  // 좋아요 클릭 핸들러
+  const onClickLike = async (event) => {
+    await axios
+      .post(url + "/posting/like/click", {
+        method: "POST",
+        body: JSON.stringify({
+          postingId: postingObj.date,
+          likeuser: sessionStorage.userid,
+        }),
+      })
+      .then(() => {
+        console.log("[Like] 좋아요 클릭 반영");
+      })
+      .catch(() => {
+        alert("[Like] 좋아요 클릭 통신 에러");
+      });
+  };
+
+  // 좋아요 취소 핸들러
+  const onCancelLike = async (event) => {
+    await axios
+      .post(url + "/posting/like/cancel", {
+        method: "POST",
+        body: JSON.stringify({
+          postingId: postingObj.date,
+          likeuser: sessionStorage.userid,
+        }),
+      })
+      .then(() => {
+        console.log("[Like] 좋아요 취소 반영");
+      })
+      .catch(() => {
+        alert("[Like] 좋아요 취소 통신 에러");
+      });
+  };
 
   // 수정 버튼 토글
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -68,6 +119,11 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
       target: { value },
     } = event;
     setNewPosting(value);
+  };
+
+  // 좋아요 핸들러
+  const onLikeHandle = (event) => {
+    setLikeState(event.target.checked);
   };
 
   return (
@@ -159,7 +215,19 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                   <p>댓글 수</p>
                 </Col>
                 <Col item xs={2}>
-                  <p>좋아요 수</p>
+                  <p>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          icon={<FavoriteBorder />}
+                          checkedIcon={<Favorite />}
+                          onChange={onLikeHandle}
+                          name="likeState"
+                        />
+                      }
+                    />
+                  </p>
+                  {/* <p>{postingObj.likeCount}</p> */}
                 </Col>
               </Row>
               <Row style={{ margin: 0, borderBottom: "1px solid lightgray " }}>
