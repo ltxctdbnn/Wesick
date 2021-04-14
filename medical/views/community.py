@@ -33,10 +33,20 @@ def create_article():
     usertype=body['usertype']
     content=body['content']
     attachmentUrl=body['attachmentUrl']
-
-
     date=(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    print(content, date,type(userid))
+
+    print(content, date, userid)
+
+    posthistory=models.Posthistory(
+                userid = userid,
+                postid = str(userid)+str(date),
+                date = date,
+                posttype = 'content'
+            )
+            models.db.session.add(posthistory)
+            models.db.session.commit()
+
+
     community = mycol.insert_one({ 
 
                                     "userid":userid,
@@ -69,13 +79,8 @@ def read_article():
         print('read.ok')
         return jsonify(lst)
 
-#     else:
-#         body=literal_eval(request.get_json()['body'])
-#         print(body)
-#         # currentPage
-#         # article = list(models.mycol.find())
-#         # print(article)
-#         return jsonify({})
+
+
 
 #수정버튼 클릭
 @bp.route('/article/update', methods=['POST'])
