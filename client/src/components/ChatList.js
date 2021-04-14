@@ -7,7 +7,7 @@ const url = `http://localhost:5000`;
 
 const ChatList = () => {
   const [users, setUsers] = useState({});
-  // const [room, setRoom] = useState(0);
+  const [room, setRoom] = useState(0);
 
   async function onUserHandler(event) {
     const response = await axios.get(url + "/chatlist");
@@ -17,27 +17,28 @@ const ChatList = () => {
     console.log("keys: ", Object.keys(response.data.users));
   }
 
-  const enterRoom = async (targetUser) => {
-    const response = await axios.post(url + "/room", {
-      headers: { "Content-Type": "application/json" },
-      data: {
-        user1: sessionStorage.userid,
-        user2: targetUser,
-      },
-      withCredentials: true,
-    });
-    console.log(response);
-    if (response.data.status === 300) {
-      setRoom(response.data.roomid);
-    } else {
-      alert("방 참여에 실패");
-    }
-  };
+  // const enterRoom = async (targetUser) => {
+  //   const response = await axios.post(url + "/room", {
+  //     headers: { "Content-Type": "application/json" },
+  //     data: {
+  //       user1: sessionStorage.userid,
+  //       user2: targetUser,
+  //     },
+  //     withCredentials: true,
+  //   });
+  //   console.log(response);
+  //   if (response.data.status === 300) {
+  //     setRoom(response.data.roomid);
+  //   } else {
+  //     alert("방 참여에 실패");
+  //   }
+  // };
 
   const userName = Object.keys(users).map((id) => (
     <li key={id}>
       {/* <button key={id} onClick={() => enterRoom(id)}> */}
-      <Link onClick={() => enterRoom(id)} to={{ pathname: "/chattest", state: {room: room}}}>
+      {/* <Link onClick={() => enterRoom(id)} to={{ pathname: "/chattest", state: {room: room}}}> */}
+      <Link to="/chat">
         {" "}
         {users[id]}{" "}
       </Link>

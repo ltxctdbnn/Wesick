@@ -11,7 +11,6 @@ mycol = mydb['chatdata'] #collection name
 def error_handler(e):
     print('An error has occurred: ' + str(e))
 
-
 @socketio.on('join')
 def on_join(data):
     name = data['name']
@@ -38,7 +37,6 @@ def send_message(data):
                                 'room' : room
                             })
     emit("receiveMessage", {'userid':userid, 'message': message}, broadcast=True, to=room)
-
 
 @socketio.on('leave')
 def on_leave():

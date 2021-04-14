@@ -51,10 +51,12 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Chat = (props) => {
+const Chat = () => {
+// const Chat = (props) => {
   const classes = useStyles();
   const [users, setUsers] = useState({});
-  const [room, setRoom] = useState(props.location.state['room']);
+  // const [room, setRoom] = useState(props.location.state['room']);
+  const [room, setRoom] = useState(1);
   const url = `http://localhost:5000`;
   console.log("Chat.js rendering");
   const messageRef = useRef();
