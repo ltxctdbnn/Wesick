@@ -370,13 +370,12 @@ const Profile = () => {
     await axios.post(url + "/user-profile", {
       method: "POST",
       body: JSON.stringify({
-        userEmail: location.state.email,
-        profilePhotoUrl: profilePhotoUrl,
-        userIntroduction: introduction,
-        userLocation: location,
-        userDiseases: userDiseases,
-        userAge: age,
-        doctorPdfUrl: doctorPdfUrl,
+        profilephotourl: profilePhotoUrl,
+        userintroduction: introduction,
+        userlocation: location,
+        userdiseases: userDiseases,
+        userage: age,
+        doctorpdfurl: doctorPdfUrl,
       }),
     });
 

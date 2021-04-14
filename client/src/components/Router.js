@@ -13,7 +13,7 @@ import Chat from "routes/Chat";
 const AppRouter = ({ isLoggedIn }) => {
   return (
     <Router>
-      {isLoggedIn && <Navigation />}
+      {/* {isLoggedIn && <Navigation />} */}
       <Switch>
         {isLoggedIn ? (
           <>

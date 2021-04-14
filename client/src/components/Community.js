@@ -4,10 +4,85 @@ import "components/css/Community.css";
 import axios from "axios";
 import { storageService } from "fBase";
 import { v4 as uuidv4 } from "uuid";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    height: theme.spacing(150),
+    marginBottom: theme.spacing(1),
+    textAlign: "center",
+    borderRadius: "0.5rem",
+    // border: "1px solid lightgray",
+  },
+  newPosting: {
+    height: theme.spacing(30),
+    marginBottom: theme.spacing(2),
+    textAlign: "center",
+    borderRadius: "0.5rem",
+    border: "1px solid lightgray",
+    input: {
+      height: theme.spacing(30),
+    },
+  },
+  newPostingTitle: {
+    height: theme.spacing(4),
+    padding: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    float: "left",
+    textAlign: "center",
+    fontFamily: "Spoqa Han Sans Neo",
+  },
+  newPostingCreate: {
+    height: theme.spacing(15),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    fontFamily: "Spoqa Han Sans Neo",
+    borderTop: "1px solid lightgray",
+  },
+  newPostingInput: {
+    width: "100%",
+    height: "100%",
+    border: "none",
+  },
+  newPostingFile: {
+    height: theme.spacing(5),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    marginBotton: theme.spacing(1),
+    border: "1px solid lightgray",
+  },
+  newPostingBtn: {
+    height: theme.spacing(4),
+    // padding: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    border: "1px solid lightgray",
+  },
+  postings: {
+    height: theme.spacing(130),
+    padding: theme.spacing(1),
+    textAlign: "center",
+    borderRadius: "0.5rem",
+    border: "1px solid lightgray",
+  },
+  attachmentInput: {
+    width: "100%",
+    height: "100%",
+    border: "1px dotted lightgray",
+  },
+}));
 
 // 커뮤니티 컴포넌트
 const Community = () => {
   const url = `http://localhost:5000`;
+  const classes = useStyles();
   const [posting, setPosting] = useState(""); // 게시글(내용)
   const [newPosting, setNewPosting] = useState(""); // 새로운 게시글
   const [postings, setPostings] = useState([]); // 게시글 배열
@@ -103,43 +178,100 @@ const Community = () => {
   const onClearAttachment = () => setAttachment(null);
 
   return (
-    <div id="community-container">
-      <h2>우리동네 커뮤니티</h2>
-      <div id="create-posting-container">
-        <form>
-          <input
-            type="text"
-            value={posting}
-            onChange={onPosting}
-            placeholder="내용을 입력하세요."
-            maxLength={120}
-          />
-          <input
-            id="attachment-input"
-            type="file"
-            accept="image/*"
-            onChange={onFileChange}
-          />
-          {attachment && (
-            <div>
-              <img src={attachment} width="200px" height="150px" />
-              <button onClick={onClearAttachment}>지우기</button>
-            </div>
-          )}
-          <button onClick={onCreatePosting}>글 올리기</button>
-        </form>
-      </div>
-      <div className="postings-container">
-        {postings.map((posting) => (
-          <Posting
-            key={posting.date}
-            postingObj={posting}
-            content={posting.content}
-            isOwner={posting.userid === sessionStorage.userid}
-            onReadPosting={onReadPosting}
-          />
-        ))}
-      </div>
+    // <div id="community-container">
+    //   <h2>우리동네 커뮤니티</h2>
+    //   <div id="create-posting-container">
+    // <form>
+    // <input
+    //   type="text"
+    //   value={posting}
+    //   onChange={onPosting}
+    //   placeholder="내용을 입력하세요."
+    //   maxLength={120}
+    // />
+    // <input
+    //   id="attachment-input"
+    //   type="file"
+    //   accept="image/*"
+    //   onChange={onFileChange}
+    // />
+    // {attachment && (
+    //   <div>
+    //     <img src={attachment} width="200px" height="150px" />
+    //     <button onClick={onClearAttachment}>지우기</button>
+    //   </div>
+    // )}
+    //   <button onClick={onCreatePosting}>글 올리기</button>
+    // </form>
+    //   </div>
+    //   <div className="postings-container">
+    //     {postings.map((posting) => (
+    //       <Posting
+    //         key={posting.date}
+    //         postingObj={posting}
+    //         content={posting.content}
+    //         isOwner={posting.userid === sessionStorage.userid}
+    //         onReadPosting={onReadPosting}
+    //       />
+    //     ))}
+    //   </div>
+    // </div>
+    <div className={classes.root}>
+      <Grid container spacing={0}>
+        <Grid item xs={12}>
+          <div className={classes.paper}>
+            <Grid container spacing={0}>
+              <Grid item xs={12}>
+                <div className={classes.newPosting}>
+                  <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                      <div className={classes.newPostingTitle}>새 글쓰기</div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <div className={classes.newPostingCreate}>
+                        <textarea
+                          className={classes.newPostingInput}
+                          cols="40"
+                          rows="5"
+                          type="text"
+                          value={posting}
+                          onChange={onPosting}
+                          placeholder="내용을 입력하세요."
+                          maxLength={120}
+                        ></textarea>
+                      </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <div className={classes.newPostingFile}>
+                        <input
+                          className={classes.attachmentInput}
+                          type="file"
+                          accept="image/*"
+                          onChange={onFileChange}
+                        />
+                        {/* {attachment && (
+                          <div>
+                            <img src={attachment} width="100%" height="100%" />
+                            <button onClick={onClearAttachment}>지우기</button>
+                          </div>
+                        )} */}
+                      </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <div className={classes.newPostingBtn}>
+                        <button onClick={onCreatePosting}>글 올리기</button>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <div className={classes.postings}>커뮤니티</div>
+              </Grid>
+            </Grid>
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };
