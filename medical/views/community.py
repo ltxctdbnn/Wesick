@@ -5,6 +5,7 @@ from flask_cors import CORS
 from .. import models
 from datetime import datetime, timedelta
 import json
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity, unset_jwt_cookies, create_refresh_token)
 from ast import literal_eval
 
 bp = Blueprint('community', __name__, url_prefix='/')
@@ -22,6 +23,7 @@ mycol = mydb['community_post'] #collection name
 
 #post, create
 @bp.route('/article/post', methods=['POST']) 
+@jwt_required()
 def create_article():
     
     body=literal_eval(request.get_json()['body'])
@@ -49,6 +51,7 @@ def create_article():
 
 
 @bp.route('/article/read', methods=['GET', 'POST'])
+@jwt_required()
 def read_article():
     if request.method=='POST':
         print('read_ok')
@@ -76,6 +79,7 @@ def read_article():
 
 #수정버튼 클릭
 @bp.route('/article/update', methods=['POST'])
+@jwt_required()
 def modify_articles():
     body=literal_eval(request.get_json()['body'])
     print(body)
@@ -93,6 +97,7 @@ def modify_articles():
 
 #삭제
 @bp.route('/article/delete', methods=['POST'])
+@jwt_required()
 def delete_articles():
     body=literal_eval(request.get_json()['body'])
     date=body['postingId']

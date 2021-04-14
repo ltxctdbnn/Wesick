@@ -1,58 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import queryString from 'query-string';
+import React, { useEffect, useState, useRef } from "react";
 import io from "socket.io-client";
 
-const endpoint = "http://localhost:5000/chat";
-const socket = io.connect(endpoint);
+const endpoint = "http://localhost:5000";
 
-const Chat = ({ location }) => {
-  const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
+const Chat = ({ room }) => {
+  console.log("Chat.js rendering");
+  const messageRef = useRef();
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
+  const socketIO = useRef();
 
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
-    setRoom(room);
-    setName(name);
-
-    socket.emit('join', { name, room }, (error) => {
-
-      if (error) {
-        alert(error);
-      }
+    socketIO.current = io(endpoint);
+    socketIO.current.emit("join", {
+      name: sessionStorage.nickname,
+      room: room,
     });
-  }, [endpoint, location.search]);
+    console.log("joined!");
+    setMessages([]);
 
-  socket.on("message2", msg => {
-    setMessages([...messages, msg]);
-  });
-
-  const onChange = (event) => {
-    setMessage(event.target.value);
-  };
+    socketIO.current.on("receiveMessage", (data) => {
+      console.log(data, "emitMessage");
+      setMessages((messages) => [...messages, data.greeting || data.message]);
+    });
+    return () => {
+      socketIO.current.emit("leave");
+    };
+  }, [room]);
 
   const onClick = () => {
-    socket.emit("message", { message, name, room });
-    setMessage("");
+    socketIO.current.emit("sendMessage", {
+      message: messageRef.current.value,
+      name: sessionStorage.userid,
+      room: room,
+    });
+    messageRef.current.value = "";
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      onClick();
+    }
   };
 
   return (
     <div>
-
       <h2>Messages</h2>
       <div>
-        {messages.map(msg => (<p>{msg}</p>))}
+        {messages.map((msg, idx) => (
+          <p key={idx}>{msg}</p>
+        ))}
       </div>
       <p>
-        <input type="text" onChange={onChange} value={message} />
+        <input type="text" onKeyPress={handleKeyPress} ref={messageRef} />
       </p>
       <p>
         <input type="button" onClick={onClick} value="Send" />
       </p>
-
-    </div >
+    </div>
   );
-}
+};
 
 export default Chat;

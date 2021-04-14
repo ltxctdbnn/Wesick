@@ -40,14 +40,13 @@ def create_app():
     app.register_blueprint(chat.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(community.bp)
-    app.register_blueprint(chat.bp)
     bcrypt = Bcrypt(app)
 
 
 # Setup the Flask-JWT-Extended extension
     app.config['JWT_SECRET_KEY'] = 'todaktodak token'
-    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(hours=20)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
     jwt = JWTManager(app)
 
