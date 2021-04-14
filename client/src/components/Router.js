@@ -6,14 +6,14 @@ import Home from "routes/Home";
 import Profile from "routes/Profile";
 
 import MyPage from "routes/MyPage";
-import Navigation from "./Navigation";
+import Sample from "routes/Sample";
 
 import Chat from "routes/Chat";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
     <Router>
-      {isLoggedIn && <Navigation />}
+      {/* {isLoggedIn && <Navigation />} */}
       <Switch>
         {isLoggedIn ? (
           <>
@@ -29,6 +29,7 @@ const AppRouter = ({ isLoggedIn }) => {
           <>
             <Route exact path="/">
               <SignIn />
+              {/* <Sample /> */}
             </Route>
             <Route exact path="/sign-up">
               <SignUp />

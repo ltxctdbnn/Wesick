@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 
+import Profile from "routes/Profile";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -41,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: "1",
     background: "white",
     boxShadow: "0px 2px 10px lightgray",
-    borderRadius: "1rem",
+    borderRadius: "1.8rem",
     padding: theme.spacing(5.75),
     textAlign: "center",
     color: theme.palette.text.secondary,
@@ -55,16 +57,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
   signUpTitle: {
-    fontSize: "2.0vw",
+    color: "black",
+    fontSize: "1.6vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "1.5vh",
+    marginBottom: "2.2vh",
   },
 
   textField: {
-    width: "25vw",
+    width: "24vw",
     margin: "0.5vw",
     fontFamily: "Spoqa Han Sans Neo",
-    borderRadius: "0",
   },
 
   buttonRegister: {
@@ -75,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
+    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
@@ -143,7 +146,12 @@ function SignUp() {
         })
         .then((response) => {
           if (response.data.status === 300) {
-            window.location.replace("/profile");
+            history.push({
+              pathname: "/profile",
+              state: {
+                email: email,
+              },
+            });
           } else if (response.data.status === 301) {
             alert("필수 입력 사항이 모두 입력되지 않았습니다.");
           } else if (response.data.status === 302) {
