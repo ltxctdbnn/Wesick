@@ -370,9 +370,10 @@ const Profile = () => {
     await axios.post(url + "/user-profile", {
       method: "POST",
       body: JSON.stringify({
+        useremail: location.state.email,
         profilephotourl: profilePhotoUrl,
         userintroduction: introduction,
-        userlocation: location,
+        userlocation: userLocation,
         userdiseases: userDiseases,
         userage: age,
         doctorpdfurl: doctorPdfUrl,
@@ -483,15 +484,15 @@ const Profile = () => {
                           value={age}
                           onChange={onAgeChange}
                         >
-                          <MenuItem value={10}>10대</MenuItem>
-                          <MenuItem value={20}>20대</MenuItem>
-                          <MenuItem value={30}>30대</MenuItem>
-                          <MenuItem value={40}>40대</MenuItem>
-                          <MenuItem value={50}>50대</MenuItem>
-                          <MenuItem value={60}>60대</MenuItem>
-                          <MenuItem value={70}>70대</MenuItem>
-                          <MenuItem value={80}>80대</MenuItem>
-                          <MenuItem value={90}>90대</MenuItem>
+                          <MenuItem value={"10"}>10대</MenuItem>
+                          <MenuItem value={"20"}>20대</MenuItem>
+                          <MenuItem value={"30"}>30대</MenuItem>
+                          <MenuItem value={"40"}>40대</MenuItem>
+                          <MenuItem value={"50"}>50대</MenuItem>
+                          <MenuItem value={"60"}>60대</MenuItem>
+                          <MenuItem value={"70"}>70대</MenuItem>
+                          <MenuItem value={"80"}>80대</MenuItem>
+                          <MenuItem value={"90"}>90대</MenuItem>
                         </Select>
                       </FormControl>
                     </div>
