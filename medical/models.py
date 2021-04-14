@@ -24,21 +24,30 @@ class Channel(db.Model):
     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(32))
     user_one = Column(Integer, ForeignKey('user.id'))
     user_two = Column(Integer, ForeignKey('user.id'))
 
 
-class Message(db.Model):
-    __tablename__ = 'message'
+class IsJoin(db.Model):
+    __tablename__ = 'is_join'
     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    message = Column(Text)
-    from_user = Column(Integer, ForeignKey('user.id'))
-    to_user = Column(Integer, ForeignKey('user.id'))
-    channel_id = Column(Integer, ForeignKey('channel.id'))
-    timestamp = Column(DateTime)
+    room_id = Column(Integer, ForeignKey('channel.id'))
+    user_one = Column(Integer)
+    user_two = Column(Integer)
+
+
+# class Message(db.Model):
+#     __tablename__ = 'message'
+#     __table_args__ = {'mysql_collate': 'utf8_general_ci'}
+
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     message = Column(Text)
+#     from_user = Column(Integer, ForeignKey('user.id'))
+#     to_user = Column(Integer, ForeignKey('user.id'))
+#     channel_id = Column(Integer, ForeignKey('channel.id'))
+#     timestamp = Column(DateTime)
 
 
 # class Post_history(db.Model): #post history table
@@ -48,4 +57,3 @@ class Message(db.Model):
 #     _id2 = db.Column(db.Integer, primary_key=True)
 #     userid = db.Column(db.Integer, ForeignKey('usertable.id'))
 #     date = db.Column(db.DATE,nullable=False)
-

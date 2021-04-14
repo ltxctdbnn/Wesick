@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import Chat from "routes/Chat";
 
 const url = `http://localhost:5000`;
 
 const ChatList = () => {
+  const selectedUser = useRef();
   const [users, setUsers] = useState({});
   const [room, setRoom] = useState(0);
+  // const [selectedUser, setSelectedUser] = useState(null);
 
   async function onUserHandler(event) {
     const response = await axios.get(url + "/chatlist");
@@ -27,7 +29,9 @@ const ChatList = () => {
     });
     console.log(response);
     if (response.data.status === 300) {
+      selectedUser.current = targetUser;
       setRoom(response.data.roomid);
+      // setSelectedUser((prev) => prev = targetUser);
     } else {
       alert("방 참여에 실패");
     }
@@ -35,9 +39,8 @@ const ChatList = () => {
 
   const userName = Object.keys(users).map((id) => (
     <li key={id}>
-      <button key={id} onClick={() => enterRoom(id)}>
-        {" "}
-        {users[id]}{" "}
+      <button onClick={() => enterRoom(id)}>
+        {users[id]}
       </button>
     </li>
   ));
@@ -49,7 +52,7 @@ const ChatList = () => {
       <div>
         <button onClick={onUserHandler}>유저 불러오기</button>
       </div>
-      {room > 0 ? <Chat room={room} /> : ""}
+      {room > 0 ? <Chat room={room} selectedUser={selectedUser.current} /> : ""}
     </>
   );
 };

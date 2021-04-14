@@ -27,7 +27,23 @@ def chatlist():
     return jsonify({"users": userlist})
 
 
-@bp.route('/chat', methods=['POST'])
+@bp.route('/history', methods=['GET'])
+def get_message():
+    print('check')
+    messages = []
+    req = request.args.get('room', 0)
+    print(f'================{req}=====================')
+    # mongoDB에서room_id로 message를 가져와야함(가져옴과 동시에 읽음표시 처리해야함)
+    # query = {'room_id': {'$eq': room_id}}  # 이 부분에서 room_id를 프론트로부터 가져와야함
+    # for message in mycol.find(query):
+    #     messages.append(message)
+
+    # new_value = {'$set': {'is_read': True}}  # is_read라는 필드가 있어야함
+    # x = mycol.update_many(query, new_value)  # 업데이트!
+    return jsonify({'messages': messages})
+
+
+@ bp.route('/chat', methods=['POST'])
 def chat():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
@@ -40,7 +56,7 @@ def chat():
         return jsonify({"userinfo": userinfo, "status": 200})
 
 
-@bp.route('/room', methods=['POST'])
+@ bp.route('/room', methods=['POST'])
 def room():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
@@ -64,12 +80,19 @@ def room():
 
             roominfo2 = models.Channel.query.filter_by(
                 user_one=lst[0], user_two=lst[1]).first()
+
+            is_join = models.IsJoin(
+                room_id=roominfo2.id,
+                user_one=0,
+                user_two=0
+            )
+            models.db.session.add(is_join)
+            models.db.session.commit()
             print(
                 f'room == {roominfo2}, user_one == {user1}, user_two == {user2}')
             return jsonify({"msg": "방 생성 성공", "roomid": roominfo2.id, 'status': 300})
         else:
             roomid = roominfo.id
-
             print(
                 f'room == {roomid}, user_one == {lst[0]}, user_two == {lst[1]}')
 

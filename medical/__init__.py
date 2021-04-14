@@ -11,7 +11,6 @@ import pymysql
 from flask_cors import CORS
 from pymongo import MongoClient
 
-from .socket import socketio
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -28,6 +27,7 @@ def create_app():
     migrate.init_app(app, db)
 
     from . import models
+    from .socket import socketio
 
     # cors
     CORS(app, supports_credentials=True)
