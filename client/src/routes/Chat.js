@@ -10,7 +10,7 @@ const Chat = ({ room, selectedUser }) => {
   const [messages, setMessages] = useState([]);
   const socketIO = useRef();
 
-  console.log(selectedUser);
+
   useEffect(() => {
     socketIO.current = io(endpoint);
     socketIO.current.emit("join", {
@@ -20,12 +20,23 @@ const Chat = ({ room, selectedUser }) => {
       room: room
     });
     console.log("joined!");
+    // alert('joined!');
     setMessages([]);
     async function getHistory() {
-      const response = await axios.get(endpoint + `/history?room=${room}`, { withCredentials: true });
-      console.log(`==================${response}===============`);
-      console.log(response)
-      setMessages([...response.data.messages.map(msg => msg.message)])
+      try {
+        const response = await axios.get(endpoint + `/history?room=${room}`, {
+          headers: {
+            'Content-type': 'application/json'
+          },
+          withCredentials: true
+        });
+        console.log(`==================${response}===============`);
+        console.log(response.data)
+        setMessages([...response.data.messages.map(msg => msg.nickname + " : " + msg.message)])
+      } catch (error) {
+        console.error(error);
+      }
+      // socketIO.current.emit('history', room = room)
     }
 
 
@@ -39,12 +50,20 @@ const Chat = ({ room, selectedUser }) => {
     //     }
     //   }
     // })
-    getHistory();
+    if (room !== undefined) {
+      getHistory();
+      console.log('call getHistory()')
+    } else {
+      console.log('room is undefiend', room);
+    }
     socketIO.current.on("receiveMessage", (data) => {
       console.log(data, "emitMessage");
       setMessages((messages) => [...messages, data.greeting || data.message]);
     });
     return () => {
+      console.log("왜?");
+      console.log(room);
+      console.log(selectedUser);
       socketIO.current.emit("leave", {
         name: sessionStorage.nickname,
         from_user: sessionStorage.userid,
@@ -54,7 +73,10 @@ const Chat = ({ room, selectedUser }) => {
     };
   }, [room]);
 
-  const onClick = () => {
+  const onSendMessage = () => {
+    console.log(room);
+    // console.log(`to_user == ${selectedUser}`)
+    // alert(selectedUser);
     socketIO.current.emit("sendMessage", {
       message: messageRef.current.value,
       nickname: sessionStorage.nickname,
@@ -67,13 +89,13 @@ const Chat = ({ room, selectedUser }) => {
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      onClick();
+      onSendMessage();
     }
   };
 
   return (
     <div>
-      <h2>Messages</h2>
+      <h2>{room} : Messages</h2>
       <div>
         {messages.map((msg, idx) => (
           <p key={idx}>{msg}</p>
@@ -83,7 +105,7 @@ const Chat = ({ room, selectedUser }) => {
         <input type="text" onKeyPress={handleKeyPress} ref={messageRef} />
       </p>
       <p>
-        <input type="button" onClick={onClick} value="Send" />
+        <input type="button" onClick={onSendMessage} value="Send" />
       </p>
     </div>
   );

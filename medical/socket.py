@@ -1,8 +1,18 @@
-from flask_socketio import SocketIO, emit, send, join_room, leave_room
+from datetime import date, datetime
+from flask_socketio import SocketIO, emit, send, join_room, leave_room, rooms
 from flask import Flask, request, jsonify
 from . import models
+from json import dumps
 
 socketio = SocketIO(cors_allowed_origins="*")
+
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError("Type %s not serializable" % type(obj))
 
 
 @socketio.on_error_default
@@ -36,48 +46,57 @@ def on_join(data):
          ' 님이 들어왔습니다.'}, broadcast=False, to=room)
 
 
+@socketio.on('history')
+def load_history(room):
+    messages = []
+    room_id = request.args.get('room', 0)
+    query = {'room_id': int(room_id)}
+    msg = models.mycol.find(query)
+    message_list = list(msg)
+    for message in message_list:
+        del message['_id']
+        messages.append(message)
+    JSONEncoder().encode(messages)
+    new_value = {'$set': {'is_read': True}}
+    x = models.mycol.update_many(query, new_value)  # 업데이트!
+    emit('receiveMessage', jsonify(
+        {'messages': messages}), broadcast=False, to=room)
+
+
 @socketio.on('sendMessage')
 def send_message(data):
-    print(f'==================data[{data}]=================')
-    message = data['nickname'].replace('"', "") + ": " + data['message']
+    nickname = data['nickname'].replace('"', "")
     message_db = data['message']
+    message = nickname + ": " + message_db
     room_id = data['room']
     from_user = data['from_user']  # 누른 사람 user id
     to_user = data['to_user']  # 눌린 사람 user id
-
+    timestamp = dumps(datetime.now(), default=json_serial)
     # 프론트에서 보낸 사람 받는 사람 id를 보내줘야함
     # 이 부분에서 message를 mongoDB에 저장해야함
     # 그 전에 우선 is_join 테이블에서 to 유저가 존재하는지를 판단해서
     # 있으면 그냥 넣고 없으면 안읽은 메세지로 표시하고mongoDB에 저장
 
     # mongoDB
-    # message_query = {
-    #     'room_id': room,
-    #     'from_user': from_user,
-    #     'to_user': to_user,
-    #     'message': message_db,
-    #     'timestamp': datetime어쩌구,
-    #     'is_read': False
-    # }
-    #     message_query = {
-    #     'room_id': room,
-    #     'from_user': from_user,
-    #     'to_user': to_user,
-    #     'message': message,
-    #     'timestamp': '2020-11-22 12:42:42',
-    #     'is_read': False
-    # }
+    message_query = {
+        'room_id': room_id,
+        'from_user': from_user,
+        'nickname': nickname,
+        'to_user': to_user,
+        'message': message_db,
+        'timestamp': timestamp,
+        'is_read': False
+    }
 
     # mysql
-    # is_join = models.IsJoin.query.filter_by(room=room)
+    is_join = models.IsJoin.query.filter_by(room_id=room_id).first()
 
-    # if is_join.user1 and is_join.user2:  # 둘다 접속중일때만
-    #     # 몽고db에 읽은 메세지로 저장
-    #     message_query['is_read'] = True
-    # mycol.insert_one(message_db)
+    if is_join.user_one and is_join.user_two:  # 둘다 접속중일때만
+        # 몽고db에 읽은 메세지로 저장
+        message_query['is_read'] = True
+    models.mycol.insert_one(message_query)
 
-    print("sendMessage",  message, data)
-    emit("receiveMessage", {'message': message}, broadcast=False, to=room)
+    emit("receiveMessage", {'message': message}, broadcast=False, to=room_id)
 
 
 @socketio.on('leave')
@@ -86,12 +105,16 @@ def on_leave(data):
     # 이 부분은 sql
     from_user = data['from_user']  # 누른 사람 user id
     to_user = data['to_user']  # 눌린 사람 user id
-    users = sorted([from_user, to_user])
+    user = sorted([from_user, to_user])
+    room = data['room']
+    nickname = data['name']
     is_join = models.IsJoin.query.filter_by(room_id=room)
     if user[0] == from_user:
         is_join.user_one = 0
     elif user[1] == from_user:
         is_join.user_two = 0
     models.db.session.commit()
-    # print("LEAVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!")
-    leave_room(room)
+
+    leave_room(room, sid=request.sid)
+    emit("receiveMessage", {'greeting': nickname +
+         ' 님이 나갔습니다.'}, broadcast=False, to=room)

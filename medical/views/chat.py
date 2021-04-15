@@ -1,20 +1,24 @@
+from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
+                                get_jwt_identity, unset_jwt_cookies, create_refresh_token)
 from flask import Blueprint
 from flask import Flask, request, jsonify, session
 import bcrypt
 from flask_cors import CORS
 from .. import models
 from datetime import datetime, timedelta
+from pprint import pprint
+import json
+from bson import ObjectId
 
-from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
-                                get_jwt_identity, unset_jwt_cookies, create_refresh_token)
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
 
 bp = Blueprint('chat', __name__, url_prefix='/')
-
-
-# @bp.route('/')
-# def home():
-
-#     return 'community page ok'
 
 
 @bp.route('/chatlist', methods=['GET'])
@@ -32,15 +36,16 @@ def chatlist():
 def get_message():
     print('check')
     messages = []
-    req = request.args.get('room', 0)
-    print(f'================{req}=====================')
-    # mongoDB에서room_id로 message를 가져와야함(가져옴과 동시에 읽음표시 처리해야함)
-    # query = {'room_id': {'$eq': room_id}}  # 이 부분에서 room_id를 프론트로부터 가져와야함
-    # for message in mycol.find(query):
-    #     messages.append(message)
-
-    # new_value = {'$set': {'is_read': True}}  # is_read라는 필드가 있어야함
-    # x = mycol.update_many(query, new_value)  # 업데이트!
+    room_id = request.args.get('room', 0)
+    query = {'room_id': int(room_id)}
+    msg = models.mycol.find(query)
+    message_list = list(msg)
+    for message in message_list:
+        del message['_id']
+        messages.append(message)
+    JSONEncoder().encode(messages)
+    new_value = {'$set': {'is_read': True}}
+    x = models.mycol.update_many(query, new_value)  # 업데이트!
     return jsonify({'messages': messages})
 
 

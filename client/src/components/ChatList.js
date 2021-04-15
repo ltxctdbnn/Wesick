@@ -6,6 +6,8 @@ const url = `http://localhost:5000`;
 
 const ChatList = () => {
   const selectedUser = useRef();
+  const selectedRoom = useRef(0);
+  const [roomNumber, setRoomNumber] = useState(0);
   const [users, setUsers] = useState({});
   const [room, setRoom] = useState(0);
   // const [selectedUser, setSelectedUser] = useState(null);
@@ -19,6 +21,7 @@ const ChatList = () => {
   }
 
   const enterRoom = async (targetUser) => {
+    setRoomNumber(targetUser);
     const response = await axios.post(url + "/room", {
       headers: { "Content-Type": "application/json" },
       data: {
@@ -27,20 +30,22 @@ const ChatList = () => {
       },
       withCredentials: true,
     });
-    console.log(response);
     if (response.data.status === 300) {
       selectedUser.current = targetUser;
+      selectedRoom.current = response.data.roomid;
+      console.log(selectedUser.current);
       setRoom(response.data.roomid);
       // setSelectedUser((prev) => prev = targetUser);
     } else {
       alert("방 참여에 실패");
+      setRoomNumber(0);
     }
   };
 
   const userName = Object.keys(users).map((id) => (
     <li key={id}>
       <button onClick={() => enterRoom(id)}>
-        {users[id]}
+        {users[id]}:  {id}
       </button>
     </li>
   ));
@@ -52,7 +57,7 @@ const ChatList = () => {
       <div>
         <button onClick={onUserHandler}>유저 불러오기</button>
       </div>
-      {room > 0 ? <Chat room={room} selectedUser={selectedUser.current} /> : ""}
+      {roomNumber !== 0 ? <Chat room={room} selectedUser={selectedUser.current} /> : ""}
     </>
   );
 };

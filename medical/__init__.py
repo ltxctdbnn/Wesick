@@ -14,7 +14,8 @@ from pymongo import MongoClient
 
 db = SQLAlchemy()
 migrate = Migrate()
-client = MongoClient("mongodb://localhost:27017/medical")
+
+
 # --------------------------------------------------------------------------- #
 
 

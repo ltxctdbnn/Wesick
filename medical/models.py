@@ -1,7 +1,12 @@
-from medical import db, client
+from medical import db
+from pymongo import MongoClient
 from sqlalchemy import ForeignKey, DateTime, Column, Integer, String, DATE, Text
 from sqlalchemy.orm import relationship, backref
 # from flask.ext.mongoalchemy  import  MongoAlchemy
+
+client = MongoClient("mongodb://localhost:27017/medical")
+mydb = client['medical']  # db name
+mycol = mydb['chatdata']  # collection name
 
 
 class User(db.Model):  # usertable
