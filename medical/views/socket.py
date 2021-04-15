@@ -23,7 +23,6 @@ def on_join(data):
             'message':chat['message'],
             'room': chat['room']
         })
-    print(chatlist)
     emit("chatHistory", chatlist, broadcast=False, to=room)
 
 @socketio.on('sendMessage')

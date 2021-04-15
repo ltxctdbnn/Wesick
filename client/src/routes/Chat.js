@@ -8,6 +8,7 @@ import io from "socket.io-client";
 import "components/css/Chat.css"
 
 const endpoint = "http://localhost:5000";
+const url = `http://localhost:5000`;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,53 +52,19 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const Chat = () => {
-// const Chat = (props) => {
+const Chat = (props) => {
   const classes = useStyles();
   const [users, setUsers] = useState({});
-  // const [room, setRoom] = useState(props.location.state['room']);
-  const [room, setRoom] = useState(1);
-  const url = `http://localhost:5000`;
+  const [room, setRoom] = useState();
   console.log("Chat.js rendering");
   const messageRef = useRef();
   const [messages, setMessages] = useState([]);
   const socketIO = useRef();
-  
+
   async function onUserHandler(event) {
     const response = await axios.get(url + "/chatlist");
     setUsers(response.data.users);
   }
-
-  useEffect(() => {
-    onUserHandler();
-
-    socketIO.current = io(endpoint);
-    socketIO.current.emit("join", {
-      name: sessionStorage.nickname,
-      room: room,
-    });
-
-    socketIO.current.on("chatHistory", (data) => {
-      setMessages([]);
-      console.log("chatHistory", data);
-      for(var i=0;i<data.length;i++){
-        setMessages((messages) => [...messages, [data[i]['message'], data[i]['userid']]]);
-      }
-    });
-
-    console.log("joined!");
-    console.log(messages);
-    // setMessages([]);
-
-    socketIO.current.on("receiveMessage", (data) => {
-      console.log(data, "emitMessage");
-      // setMessages((messages) => [...messages, data.greeting || data.message]);
-      setMessages((messages) => [...messages, [data.message, data.userid]]);
-    });
-    return () => {
-      socketIO.current.emit("leave");
-    };
-  }, [room]);
 
   const enterRoom = async (targetUser) => {
     const response = await axios.post(url + "/room", {
@@ -108,7 +75,6 @@ const Chat = () => {
       },
       withCredentials: true,
     });
-    console.log(response);
     if (response.data.status === 300) {
       setRoom(response.data.roomid);
     } else {
@@ -116,10 +82,47 @@ const Chat = () => {
     }
   };
 
+  useEffect(() => {
+    socketIO.current = io(endpoint);
+    console.log('room:', room);
+
+    if (room > 0){
+      socketIO.current.emit("join", {
+        name: sessionStorage.nickname,
+        room: room,
+      });
+      console.log("joined! Room: " + room);
+    }
+    
+
+    socketIO.current.on("chatHistory", (data) => {
+      setMessages([]);
+      console.log("chatHistory: ", data);
+      for(var i=0;i<data.length;i++){
+        setMessages((messages) => [...messages, [data[i]['message'], data[i]['userid']]]);
+      }
+    });
+
+    console.log(messages);
+
+    socketIO.current.on("receiveMessage", (data) => {
+      console.log(data, "emitMessage");
+      setMessages((messages) => [...messages, [data.message, data.userid]]);
+    });
+    return () => {
+      socketIO.current.emit("leave");
+    };
+  }, [room]);
+
+  useEffect(() => {
+    onUserHandler();
+    console.log("유저목록출력");
+    enterRoom(props.location.state['targetUser']);
+  }, [])
+
   const userName = Object.keys(users).map((id) => (
       <li key={id} className={classes.user}>
         <button key={id} onClick={() => enterRoom(id) } className={classes.userbutton}>
-        {/* <button key={id}> */}
           {" "}
           {users[id]}{" "}
           <p>마지막메세지</p>

@@ -10,13 +10,6 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
 
 bp = Blueprint('chat', __name__, url_prefix='/')
 
-
-@bp.route('/')
-def home():
-
-    return 'community page ok'
-
-
 @bp.route('/chatlist', methods=['GET'])
 def chatlist():
     users = models.User.query.all()
@@ -32,7 +25,6 @@ def chat():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
     else:
-        print('check')
         username = request.json.get('userName')
         print('userName:', userName)
 
@@ -72,5 +64,4 @@ def room():
 
             print(
                 f'room == {roomid}, user_one == {lst[0]}, user_two == {lst[1]}')
-
             return jsonify({"roomid": roomid, "status": 300})
