@@ -14,9 +14,9 @@ const useStyles = makeStyles((theme) => ({
     container: {
       height: "100%"
     },
-    containerLeft: {
+    spacingControl: {
       height: "100%",
-      padding: theme.spacing(1)
+      padding: theme.spacing(1),
     },
     userContainer: {
       height: "100%",
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
       borderBottom: "1px solid #e5e5e5"
     },
     titleText: {
+      color: "black",
       verticalAlign: "middle"
     },
     titleRight: {
@@ -60,12 +61,24 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     user: {
-      height: "100px",
+      height: "90px",
       width: "100%",
       borderTop: "1px solid #e5e5e5",
       borderBottom: "1px solid #e5e5e5"
     },
-    userbutton: {
+    userPic: {
+      width: "100%",
+      height: "100%"
+    },
+    userNickname: {
+      fontWeight: "bold",
+      textAlign: "left",
+      marginBottom: "1px"
+    },
+    lastMessage: {
+      textAlign: "left"
+    },
+    userButton: {
       height: "100%",
       width: "100%",
       background: "white",
@@ -76,10 +89,6 @@ const useStyles = makeStyles((theme) => ({
       height: "5%",
       width: "100%",
       borderTop: "1px solid #e5e5e5"
-    },
-    containerRight: {
-      height: "100%",
-      padding: theme.spacing(1)
     },
     messageContainer: {
       height: "100%",
@@ -115,10 +124,6 @@ const useStyles = makeStyles((theme) => ({
       height: "15%",
       padding: theme.spacing(1),
       borderTop: "1px solid #e5e5e5"
-    },
-    inputControl: {
-      height: "100%",
-      padding: theme.spacing(1),
     },
     inputText: {
       width: "100%",
@@ -210,11 +215,17 @@ const Chat = (props) => {
 
   const userName = Object.keys(users).map((id) => (
       <li key={id} className={classes.user}>
-        <button key={id} onClick={() => enterRoom(id) } className={classes.userbutton}>
-          {" "}
-          {users[id]}{" "}
-          <p>마지막메세지</p>
-        </button>
+        <Grid container className={classes.spacingControl}>
+          <Grid container item xs={3} className={classes.spacingControl}>
+            <img src="./images/default_profile_img.png" className={classes.userPic} />
+          </Grid>
+          <Grid container item xs className={classes.spacingControl}>
+            <button key={id} onClick={() => enterRoom(id) } className={classes.userButton}>
+              <p className={classes.userNickname}>{users[id]}</p>
+              <p className={classes.lastMessage}>마지막메세지</p>
+            </button>
+          </Grid>
+        </Grid>
       </li>
   ));
 
@@ -237,15 +248,15 @@ const Chat = (props) => {
   return (
     <>
       <Grid container className={classes.container}>
-        <Grid container item xs={4} className={classes.containerLeft}>
+        <Grid container item xs={4} className={classes.spacingControl}>
           <div className={classes.userContainer}>
             <div className={classes.titleLeft}>
-              <p>메세지 목록</p>
+              <p className={classes.titleText}>메세지 목록</p>
             </div>
             <ul className={classes.userlist}>{userName}</ul>
           </div>
         </Grid>
-        <Grid container item xs className={classes.containerRight}>
+        <Grid container item xs className={classes.spacingControl}>
           <div className={classes.messageContainer}>
             <Grid className={classes.titleLeft}>
               <p>Online</p>
@@ -258,10 +269,10 @@ const Chat = (props) => {
               ))}
             </Grid>
             <Grid container className={classes.inputContainer}>
-              <Grid container item xs={9} className={classes.inputControl}>
+              <Grid container item xs={9} className={classes.spacingControl}>
                   <input type="text" placeholder="메세지 입력하기" onKeyPress={handleKeyPress} ref={messageRef} className={classes.inputText}/>
               </Grid>
-              <Grid container item xs className={classes.inputControl}>
+              <Grid container item xs className={classes.spacingControl}>
                 <Button
                   variant="contained"
                   className={classes.sendButton}
