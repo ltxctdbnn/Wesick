@@ -10,69 +10,67 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 // [댓글] 컴포넌트
 const Comment = ({ commentObj, content, isOwner, onReadComment }) => {
   const url = `http://localhost:5000`;
-  const [editing, setEditing] = useState(false);
-  const [comment, setComment] = useState("");
   const [likeCount, setLikeCount] = useState(commentObj.likepeoplelength);
-  // const [likeState, setLikeState] = useState(
-  //   Boolean(commentObj.likepeople.find(liked))
-  // );
+  const [likeState, setLikeState] = useState(
+    Boolean(commentObj.likepeople.find(liked))
+  );
 
-  // // [댓글] 이전에 사용자 댓글 좋아요 클릭 여부 확인
-  // const liked = (element) => {
-  //   if (element === sessionStorage.userid) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
+  // [댓글] 이전에 사용자 댓글 좋아요 클릭 여부 확인
+  function liked(element) {
+    if (element === sessionStorage.userid) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  // // [댓글] 좋아요 버튼 핸들러
-  // function onLikeHandle(event) {
-  //   setLikeState(event.target.checked);
-  //   if (event.target.checked === true) {
-  //     onClickLike();
-  //   } else {
-  //     onCancelLike();
-  //   }
-  // }
+  // [댓글] 좋아요 버튼 핸들러
+  function onLikeHandle(event) {
+    setLikeState(event.target.checked);
+    if (event.target.checked === true) {
+      onClickLike();
+    } else {
+      onCancelLike();
+    }
+  }
 
-  // // [CLICK] 좋아요 클릭 핸들러
-  // const onClickLike = async () => {
-  //   setLikeCount(likeCount + 1);
-  //   await axios
-  //     .post(url + "/comment/like/click", {
-  //       body: JSON.stringify({
-  //         commentid: commentObj.commentid,
-  //         likeuser: sessionStorage.userid,
-  //       }),
-  //     })
-  //     .then(() => {
-  //       console.log("[CLICK] Comment Like");
-  //     })
-  //     .catch(() => {
-  //       alert("[CLICK] Comment Like Error");
-  //     });
-  // };
+  // [CLICK] 좋아요 클릭 핸들러
+  const onClickLike = async () => {
+    setLikeCount(likeCount + 1);
+    await axios
+      .post(url + "/comment/like/click", {
+        body: JSON.stringify({
+          commentid: commentObj.commentid,
+          likeuser: sessionStorage.userid,
+        }),
+      })
+      .then(() => {
+        console.log("[CLICK] Comment Like");
+      })
+      .catch(() => {
+        alert("[CLICK] Comment Like Error");
+      });
+  };
 
-  // // [CANCEL] 댓글 좋아요 취소 핸들러
-  // const onCancelLike = async () => {
-  //   if (likeCount >= 0) {
-  //     setLikeCount(likeCount - 1);
-  //   }
-  //   await axios
-  //     .post(url + "/comment/like/cancel", {
-  //       body: JSON.stringify({
-  //         commentid: commentObj.commentid,
-  //         likeuser: sessionStorage.userid,
-  //       }),
-  //     })
-  //     .then(() => {
-  //       console.log("[CANCEL] Comment Like");
-  //     })
-  //     .catch(() => {
-  //       alert("[CANCEL] Comment Like Error");
-  //     });
-  // };
+  // [CANCEL] 댓글 좋아요 취소 핸들러
+  const onCancelLike = async () => {
+    if (likeCount >= 0) {
+      setLikeCount(likeCount - 1);
+    }
+    await axios
+      .post(url + "/comment/like/cancel", {
+        body: JSON.stringify({
+          commentid: commentObj.commentid,
+          likeuser: sessionStorage.userid,
+        }),
+      })
+      .then(() => {
+        console.log("[CANCEL] Comment Like");
+      })
+      .catch(() => {
+        alert("[CANCEL] Comment Like Error");
+      });
+  };
 
   // [DELETE] 댓글
   const onDeleteComment = async () => {
@@ -123,7 +121,7 @@ const Comment = ({ commentObj, content, isOwner, onReadComment }) => {
             </Col>
             <Col>
               {/* [댓글] 좋아요 버튼 */}
-              {/* <FormControlLabel
+              <FormControlLabel
                 control={
                   <Checkbox
                     icon={<FavoriteBorder />}
@@ -133,7 +131,10 @@ const Comment = ({ commentObj, content, isOwner, onReadComment }) => {
                     name="likeState"
                   />
                 }
-              /> */}
+              />
+            </Col>
+            <Col>
+              <p>{likeCount}</p>
             </Col>
             {/* [댓글] 작성자일 경우 삭제 버튼 표기 */}
             {isOwner && (

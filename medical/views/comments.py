@@ -43,7 +43,9 @@ def create_comment():
         "usertype": usertype,
         "content": content,
         "date": date,
-        "profilephotourl": profilephoto.profilephotourl
+        "profilephotourl": profilephoto.profilephotourl,
+        'likepeople': []
+
     })
     print('creat_ok')
     return jsonify({"msg": "글생성 성공", 'status': 200})
@@ -54,9 +56,12 @@ def create_comment():
 @jwt_required()
 def read_comment():
     if request.method == 'POST':
+        body = literal_eval(request.get_json()['body'])
+        postingid = body['postingid']
         print('commentread_ok')
+
         lst = []
-        for m in mycol.find():
+        for m in mycol.find({'postingid': postingid}):
             lst.append({
                 "commentid": m['commentid'],
                 "postingid": m["postingid"],
@@ -65,7 +70,9 @@ def read_comment():
                 "usertype": m["usertype"],
                 "content": m["content"],
                 "date": m["date"],
-                "profilephotourl": m['profilephotourl']
+                "profilephotourl": m['profilephotourl'],
+                "likepeople": m['likepeople'],
+                "likepeoplelength": len(m['likepeople'])
             })
         return jsonify(lst)
 
@@ -78,5 +85,37 @@ def delete_articles():
     commentid = body['commentid']
 
     mycol.delete_one({'commentid': commentid})
+
+    return jsonify({"msg": "삭제성공", 'status': 200})
+
+
+# [CLICK] 댓글 좋아요
+@bp.route('/comment/like/click', methods=['POST'])
+@jwt_required()
+def comment_click_like():
+    body = literal_eval(request.get_json()['body'])
+    commentid = body['commentid']
+    likeuser = body['likeuser']
+
+    mycol.update_one(
+        {'commentid': commentid},
+        {'$push': {'likepeople': likeuser}}
+    )
+
+    return jsonify({"msg": "삭제성공", 'status': 200})
+
+
+# [CANCEL] 댓글 좋아요 취소
+@bp.route('/comment/like/cancel', methods=['POST'])
+@jwt_required()
+def comment_click_like_cancel():
+    body = literal_eval(request.get_json()['body'])
+    commentid = body['commentid']
+    likeuser = body['likeuser']
+
+    mycol.update_one(
+        {'commentid': commentid},
+        {'$pull': {'likepeople': likeuser}}
+    )
 
     return jsonify({"msg": "삭제성공", 'status': 200})

@@ -31,11 +31,11 @@ def create_article():
     print(body)
     userid = body['userid']
     nickname = body['nickname']
-    usertype = body['usertype']
+    # usertype = body['usertype']
     content = body['content']
     attachmentUrl = body['attachmentUrl']
 
-    profilephoto = models.Userprofile.query.filter_by(userid=userid).first()
+    usercheck = models.Userprofile.query.filter_by(userid=userid).first()
 
     date = (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
@@ -45,11 +45,11 @@ def create_article():
         "postingid": postingid,
         "userid": userid,
         "nickname": nickname,
-        "usertype": usertype,
+        "usertype": usercheck.usertype,
         "content": content,
         "attachmentUrl": attachmentUrl,
         "date": date,
-        "profilephotourl": profilephoto.profilephotourl,
+        "profilephotourl": usercheck.profilephotourl,
         'likepeople': []
     })
     print('creat_ok')
@@ -81,7 +81,7 @@ def read_article():
         return jsonify(lst)
 
 
-# 수정버튼 클릭
+# [UPDATE] 게시글 수정
 @bp.route('/article/update', methods=['POST'])
 @jwt_required()
 def modify_articles():
@@ -99,7 +99,7 @@ def modify_articles():
     return jsonify({"msg": "수정완료 성공", 'status': 200})
 
 
-# 삭제
+# [DELETE] 게시글 삭제
 @bp.route('/article/delete', methods=['POST'])
 @jwt_required()
 def delete_articles():
@@ -112,7 +112,7 @@ def delete_articles():
     return jsonify({"msg": "삭제성공", 'status': 200})
 
 
-# 좋아요 클릭
+# [CLICK] 게시글 좋아요
 @bp.route('/posting/like/click', methods=['POST'])
 @jwt_required()
 def click_like():
@@ -128,7 +128,7 @@ def click_like():
     return jsonify({"msg": "삭제성공", 'status': 200})
 
 
-# 좋아요 취소
+# [CANCEL] 게시글 좋아요 취소
 @bp.route('/posting/like/cancel', methods=['POST'])
 @jwt_required()
 def click_like_cancel():

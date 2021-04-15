@@ -3,7 +3,6 @@ import axios from "axios";
 import "components/css/Posting.css";
 import { storageService } from "fBase";
 import Comment from "components/Comment";
-import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 import { Container, Col, Row, Card } from "react-bootstrap";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -11,7 +10,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
-// 포스트 카드 컴포넌트
+// [게시글] 컴포넌트
 const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
   const url = `http://localhost:5000`;
   const [editing, setEditing] = useState(false);
@@ -77,7 +76,17 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
       });
   };
 
-  // 수정 버튼 토글
+  // [좋아요] 버튼 핸들러
+  const onLikeHandle = (event) => {
+    setLikeState(event.target.checked);
+    if (event.target.checked === true) {
+      onClickLike();
+    } else {
+      onCancelLike();
+    }
+  };
+
+  // [게시글] 수정 버튼 토글
   const toggleEditing = () => setEditing((prev) => !prev);
 
   // [UPDATE] 게시글 업데이트 핸들러
@@ -133,16 +142,6 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
     setNewPosting(value);
   };
 
-  // 좋아요 버튼 핸들러
-  const onLikeHandle = (event) => {
-    setLikeState(event.target.checked);
-    if (event.target.checked === true) {
-      onClickLike();
-    } else {
-      onCancelLike();
-    }
-  };
-
   // 댓글 작성 핸들러
   const onComment = (event) => {
     const {
@@ -181,6 +180,9 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
     await axios
       .post(url + "/posting/comment/read", {
         method: "POST",
+        body: JSON.stringify({
+          postingid: postingObj.postingid,
+        }),
       })
       .then((response) => {
         response.data.reverse();
@@ -202,9 +204,13 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
               >
                 <Grid item xs={12}>
                   <Row
-                    style={{ margin: 0, borderBottom: "1px solid lightgray " }}
+                    style={{
+                      margin: 0,
+                      borderBottom: "1px solid lightgray",
+                    }}
                   >
                     <Container style={{ width: "100%", height: "16vh" }}>
+                      {/* 게시글 수정 모드 시 입력란 */}
                       <textarea
                         cols="40"
                         rows="5"
@@ -225,6 +231,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                   <Row
                     style={{ margin: 0, borderBottom: "1px solid lightgray " }}
                   >
+                    {/* 게시글 수정 모드 시 취소, 완료 버튼 */}
                     <button onClick={toggleEditing}>취소</button>
                     <button onClick={onUpdatePosting}>완료</button>
                   </Row>
@@ -241,6 +248,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
             <Grid item xs={12}>
               <Row style={{ margin: 0, borderBottom: "1px solid lightgray " }}>
                 <Col item xs={2}>
+                  {/* 게시글 작성자 프로필 사진 */}
                   <img
                     id="profileImg"
                     src={postingObj.profilephotourl}
@@ -250,17 +258,27 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                 </Col>
                 <Col item xs={10}>
                   <Row>
-                    <p>{postingObj.nickname}</p>
+                    {/* 게시글 작성자 닉네임 */}
+                    <Col>{postingObj.nickname}</Col>
+                    {/* 게시글 작성자가 의사일 경우 토닥터 뱃지 표기 */}
+                    {postingObj.usertype && (
+                      <>
+                        <Col>{postingObj.usertype}</Col>
+                      </>
+                    )}
                   </Row>
                   <Row>
+                    {/* 게시글 날짜 */}
                     <p>{postingObj.date}</p>
                   </Row>
                 </Col>
               </Row>
               <Row style={{ margin: 0, borderBottom: "1px solid lightgray " }}>
                 <Container>
+                  {/* 게시글 내용 */}
                   <p>
                     글 내용: {content}
+                    {/* 게시글 첨부파일 포함 시 이미지 출력 */}
                     {postingObj.attachmentUrl && (
                       <img
                         src={postingObj.attachmentUrl}
@@ -281,8 +299,8 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                 </Col>
                 <Col item xs={2}>
                   <Row>
-                    {/* 좋아요 */}
                     <Col>
+                      {/* 좋아요 */}
                       <FormControlLabel
                         control={
                           <Checkbox
@@ -296,6 +314,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                       />
                     </Col>
                     <Col>
+                      {/* 좋아요 수 */}
                       <p>{likeCount}</p>
                     </Col>
                   </Row>
@@ -317,6 +336,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
               </Row>
               <Row>
                 <Col item xs={8}>
+                  {/* 댓글 입력란 */}
                   <input
                     type="text"
                     value={comment}
@@ -325,6 +345,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                   />
                 </Col>
                 <Col item xs={4}>
+                  {/* 댓글 등록 버튼 */}
                   <button onClick={onCreateComment}>댓글 입력</button>
                 </Col>
               </Row>
@@ -332,9 +353,11 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                 <>
                   <Row>
                     <Col item xs={4}>
+                      {/* 댓글 삭제 버튼 */}
                       <button onClick={onDeletePosting}>삭제</button>
                     </Col>
                     <Col item xs={4}>
+                      {/* 댓글 수정 버튼 */}
                       <button onClick={toggleEditing}>수정</button>
                     </Col>
                   </Row>
