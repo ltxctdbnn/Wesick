@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
     textAlign: "center",
     borderRadius: "0.5rem",
-    // border: "1px solid lightgray",
   },
   newPosting: {
     height: theme.spacing(30),
@@ -62,14 +61,11 @@ const useStyles = makeStyles((theme) => ({
   },
   newPostingBtn: {
     height: theme.spacing(4),
-    // padding: theme.spacing(1),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     border: "1px solid lightgray",
   },
   postings: {
-    // position: "absolute",
-    // width: "100%",
     height: theme.spacing(130),
     padding: theme.spacing(1),
     textAlign: "center",
@@ -94,7 +90,7 @@ const Community = () => {
   const [attachment, setAttachment] = useState("");
 
   // 새 게시글 작성 후 글 올리기하면 호출
-  useEffect(async () => {
+  useEffect(() => {
     onReadPosting();
   }, [newPosting]);
 
@@ -139,7 +135,7 @@ const Community = () => {
         alert("[CREATE] response (x)");
       });
 
-    setPosting(""); // 입력란 비우기
+    setPosting("");
     setAttachment("");
   };
 
@@ -182,44 +178,6 @@ const Community = () => {
   const onClearAttachment = () => setAttachment(null);
 
   return (
-    // <div id="community-container">
-    //   <h2>우리동네 커뮤니티</h2>
-    //   <div id="create-posting-container">
-    // <form>
-    // <input
-    //   type="text"
-    //   value={posting}
-    //   onChange={onPosting}
-    //   placeholder="내용을 입력하세요."
-    //   maxLength={120}
-    // />
-    // <input
-    //   id="attachment-input"
-    //   type="file"
-    //   accept="image/*"
-    //   onChange={onFileChange}
-    // />
-    // {attachment && (
-    //   <div>
-    //     <img src={attachment} width="200px" height="150px" />
-    //     <button onClick={onClearAttachment}>지우기</button>
-    //   </div>
-    // )}
-    //   <button onClick={onCreatePosting}>글 올리기</button>
-    // </form>
-    //   </div>
-    // <div className="postings-container">
-    //   {postings.map((posting) => (
-    //     <Posting
-    //       key={posting.date}
-    //       postingObj={posting}
-    //       content={posting.content}
-    //       isOwner={posting.userid === sessionStorage.userid}
-    //       onReadPosting={onReadPosting}
-    //     />
-    //   ))}
-    // </div>
-    // </div>
     <Paper style={{ width: "100%", border: "none" }}>
       <Grid container spacing={0}>
         <Grid item xs={12}>
@@ -279,7 +237,7 @@ const Community = () => {
             <Grid item xs={12}>
               {postings.map((posting) => (
                 <Posting
-                  key={posting.date}
+                  key={posting.postingid}
                   postingObj={posting}
                   content={posting.content}
                   isOwner={posting.userid === sessionStorage.userid}

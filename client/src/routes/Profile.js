@@ -356,6 +356,8 @@ const Profile = () => {
         "data_url"
       );
       profilePhotoUrl = await response.ref.getDownloadURL();
+    } else {
+      profilePhotoUrl = "./images/default_profile.png";
     }
 
     if (doctorPdf !== "") {

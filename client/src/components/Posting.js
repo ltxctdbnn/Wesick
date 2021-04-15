@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "components/css/Posting.css";
 import { storageService } from "fBase";
+import Comment from "components/Comment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 import { Container, Col, Row, Card } from "react-bootstrap";
@@ -15,11 +16,19 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
   const url = `http://localhost:5000`;
   const [editing, setEditing] = useState(false);
   const [newPosting, setNewPosting] = useState(postingObj.content);
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [likeCount, setLikeCount] = useState(postingObj.likepeoplelength);
   const [likeState, setLikeState] = useState(
     Boolean(postingObj.likepeople.find(liked))
   );
-  const [likeCount, setLikeCount] = useState(postingObj.likepeoplelength);
 
+  useEffect(() => {
+    onReadComment();
+  }, [newComment]);
+
+  // [게시글] 사용자 게시글 좋아요 클릭 여부 확인
   function liked(element) {
     if (element === sessionStorage.userid) {
       return true;
@@ -28,39 +37,27 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
     }
   }
 
-  // 새 게시글 작성 후 글 올리기하면 호출
-  // useEffect(() => {
-  //   console.log(likeState);
-  //   if (likeState === true) {
-  //     onClickLike();
-  //   } else {
-  //     onCancelLike();
-  //   }
-  // }, [likeState]);
-
-  // 좋아요 클릭 핸들러
+  // [CLICK] 게시글 좋아요 클릭 핸들러
   const onClickLike = async (event) => {
-    // onReadPosting();
     setLikeCount(likeCount + 1);
     await axios
       .post(url + "/posting/like/click", {
         method: "POST",
         body: JSON.stringify({
-          postingId: postingObj.date,
+          postingid: postingObj.postingid,
           likeuser: sessionStorage.userid,
         }),
       })
       .then(() => {
-        console.log("[Like] 좋아요 클릭 반영");
+        console.log("[CLICK] Posting Like");
       })
       .catch(() => {
-        alert("[Like] 좋아요 클릭 통신 에러");
+        alert("[CLICK] Posting Like Error");
       });
   };
 
-  // 좋아요 취소 핸들러
+  // [CANCEL] 게시글 좋아요 취소 핸들러
   const onCancelLike = async (event) => {
-    // onReadPosting();
     if (likeCount >= 0) {
       setLikeCount(likeCount - 1);
     }
@@ -68,15 +65,15 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
       .post(url + "/posting/like/cancel", {
         method: "POST",
         body: JSON.stringify({
-          postingId: postingObj.date,
+          postingid: postingObj.postingid,
           likeuser: sessionStorage.userid,
         }),
       })
       .then(() => {
-        console.log("[Like] 좋아요 취소 반영");
+        console.log("[CANCEL] Posting Like");
       })
       .catch(() => {
-        alert("[Like] 좋아요 취소 통신 에러");
+        alert("[CANCEL] Posting Like Error");
       });
   };
 
@@ -90,7 +87,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
       .post(url + "/article/update", {
         method: "POST",
         body: JSON.stringify({
-          postingId: postingObj.date,
+          postingid: postingObj.postingid,
           editContent: newPosting,
         }),
       })
@@ -112,7 +109,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
         .post(url + "/article/delete", {
           method: "POST",
           body: JSON.stringify({
-            postingId: postingObj.date,
+            postingid: postingObj.postingid,
           }),
         })
         .then(() => {
@@ -136,7 +133,7 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
     setNewPosting(value);
   };
 
-  // 좋아요 핸들러
+  // 좋아요 버튼 핸들러
   const onLikeHandle = (event) => {
     setLikeState(event.target.checked);
     if (event.target.checked === true) {
@@ -144,6 +141,54 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
     } else {
       onCancelLike();
     }
+  };
+
+  // 댓글 작성 핸들러
+  const onComment = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setComment(value);
+  };
+
+  // [CREATE] 댓글 생성 핸들러
+  const onCreateComment = async (event) => {
+    event.preventDefault();
+    await axios
+      .post(url + "/posting/comment/create", {
+        method: "POST",
+        body: JSON.stringify({
+          postingid: postingObj.postingid,
+          userid: sessionStorage.userid,
+          nickname: sessionStorage.nickname,
+          usertype: "토닥이",
+          content: comment,
+        }),
+        withCredentials: true,
+      })
+      .then(() => {
+        console.log("[CREATE] 새 댓글 생성");
+        setNewComment(comment);
+      })
+      .catch(() => {
+        alert("[CREATE] response (x)");
+      });
+    setComment("");
+  };
+
+  // [READ] 댓글 삭제 핸들러
+  const onReadComment = async () => {
+    await axios
+      .post(url + "/posting/comment/read", {
+        method: "POST",
+      })
+      .then((response) => {
+        response.data.reverse();
+        setComments(response.data);
+      })
+      .catch(() => {
+        alert("[READ] comment response (x)");
+      });
   };
 
   return (
@@ -235,32 +280,52 @@ const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
                   <p>댓글 수</p>
                 </Col>
                 <Col item xs={2}>
-                  {/* 좋아요 */}
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        icon={<FavoriteBorder />}
-                        checkedIcon={<Favorite />}
-                        onChange={onLikeHandle}
-                        checked={likeState}
-                        name="likeState"
+                  <Row>
+                    {/* 좋아요 */}
+                    <Col>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            icon={<FavoriteBorder />}
+                            checkedIcon={<Favorite />}
+                            onChange={onLikeHandle}
+                            checked={likeState}
+                            name="likeState"
+                          />
+                        }
                       />
-                    }
-                  />
-                  <p>{likeCount}</p>
+                    </Col>
+                    <Col>
+                      <p>{likeCount}</p>
+                    </Col>
+                  </Row>
                 </Col>
               </Row>
               <Row style={{ margin: 0, borderBottom: "1px solid lightgray " }}>
                 <Card style={{ marginLeft: 20 }}>
-                  <p>댓글 공간</p>
+                  {/* 댓글 목록 */}
+                  {comments.map((comment) => (
+                    <Comment
+                      key={comment.commentid}
+                      commentObj={comment}
+                      content={comment.content}
+                      isOwner={comment.userid === sessionStorage.userid}
+                      onReadComment={onReadComment}
+                    />
+                  ))}
                 </Card>
               </Row>
               <Row>
                 <Col item xs={8}>
-                  <p>댓글 입력란</p>
+                  <input
+                    type="text"
+                    value={comment}
+                    onChange={onComment}
+                    placeholder="댓글을 입력하세요."
+                  />
                 </Col>
                 <Col item xs={4}>
-                  <p>댓글추가 버튼</p>
+                  <button onClick={onCreateComment}>댓글 입력</button>
                 </Col>
               </Row>
               {isOwner && (
