@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import { Container, Col, Row, Card } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Chat from 'components/Chat.js';
 
 const useStyles = makeStyles((theme) => ({

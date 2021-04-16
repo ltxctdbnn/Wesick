@@ -182,12 +182,13 @@ const Chat = (props) => {
     if (room > 0){
       socketIO.current.emit("join", {
         name: sessionStorage.nickname,
-        room: room,
+        from_user: sessionStorage.userid,
+        to_user: props.targetuser,
+        room: room
       });
       console.log("joined! Room: " + room);
     }
     
-
     socketIO.current.on("chatHistory", (data) => {
       setMessages([]);
       console.log("chatHistory: ", data);
@@ -204,6 +205,9 @@ const Chat = (props) => {
     });
     return () => {
       socketIO.current.emit("leave", {
+        name: sessionStorage.nickname,
+        from_user: sessionStorage.userid,
+        to_user: props.targetuser,
         room: room
       });
     };
@@ -231,19 +235,21 @@ const Chat = (props) => {
       </li>
   ));
 
-  const onClick = () => {
+  const onSendMessage = () => {
     console.log("userid:", sessionStorage.userid);
     socketIO.current.emit("sendMessage", {
       message: messageRef.current.value,
-      userid: sessionStorage.userid,
+      nickname: sessionStorage.nickname,
       room: room,
+      from_user: sessionStorage.userid,
+      to_user: props.targetuser
     });
     messageRef.current.value = "";
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      onClick();
+      onSendMessage();
     }
   };
 
@@ -279,7 +285,7 @@ const Chat = (props) => {
                   variant="contained"
                   className={classes.sendButton}
                   endIcon={<Icon>send</Icon>}
-                  onClick={onClick}
+                  onClick={onSendMessage}
                 >
                 보내기
                 </Button>
