@@ -6,6 +6,11 @@ import "components/css/App.css";
 axios.defaults.baseURL = `http://localhost:5000`;
 axios.defaults.withCredentials = true;
 
+const accessToken = sessionStorage.getItem("accessToken");
+if (sessionStorage.getItem("accessToken") !== "") {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+}
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState("");
 

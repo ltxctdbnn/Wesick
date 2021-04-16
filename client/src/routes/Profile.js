@@ -163,11 +163,66 @@ const Profile = () => {
     reader.readAsDataURL(theFile);
   };
 
+  // 의사 인증 pdf 파입 업로드 핸들러
+  const onDoctorPdfChange = (event) => {
+    const {
+      target: { files },
+    } = event;
+    const theFile = files[0];
+    console.log(files[0]);
+    const reader = new FileReader();
+
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      } = finishedEvent;
+      setDoctorPdf(result);
+    };
+    reader.readAsDataURL(theFile);
+  };
+
   // 프로필 사진 Clear 핸들러
   const onClearProfilePhoto = () => setProfilePhoto(null);
 
   // 작성 프로필 저장 핸들러
-  const onSave = () => {
+  const onSubmitProfile = async (event) => {
+    event.preventDefault();
+
+    let profilePhotoUrl = "";
+    let doctorPdfUrl = "";
+
+    if (profilePhoto !== "") {
+      const profilePhotoRef = storageService
+        .ref()
+        .child(`${location.state.email}/${uuidv4()}`);
+      const response = await profilePhotoRef.putString(
+        profilePhoto,
+        "data_url"
+      );
+      profilePhotoUrl = await response.ref.getDownloadURL();
+    }
+
+    if (doctorPdf !== "") {
+      const doctorPdfRef = storageService
+        .ref()
+        .child(`${location.state.email}/${uuidv4()}`);
+      const response = await doctorPdfRef.putString(doctorPdf, "data_url");
+      doctorPdfUrl = await response.ref.getDownloadURL();
+    }
+
+    await axios.post(url + "/user-profile", {
+      method: "POST",
+      body: JSON.stringify({
+        userEmail: location.state.email,
+        profilePhotoUrl: profilePhotoUrl,
+        userIntroduction: introduction,
+        userLocation: location,
+        userDiseases: userDiseases,
+        userAge: age,
+        doctorPdfUrl: doctorPdfUrl,
+      }),
+    });
+
     history.push({
       pathname: "/",
     });

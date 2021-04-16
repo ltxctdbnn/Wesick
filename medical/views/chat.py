@@ -11,10 +11,10 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
 bp = Blueprint('chat', __name__, url_prefix='/')
 
 
-@bp.route('/')
-def home():
+# @bp.route('/')
+# def home():
 
-    return 'community page ok'
+#     return 'community page ok'
 
 
 @bp.route('/chatlist', methods=['GET'])
@@ -28,6 +28,7 @@ def chatlist():
 
 
 @bp.route('/chat', methods=['POST'])
+@jwt_required()
 def chat():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
@@ -41,6 +42,7 @@ def chat():
 
 
 @bp.route('/room', methods=['POST'])
+@jwt_required()
 def room():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402

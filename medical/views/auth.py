@@ -73,7 +73,7 @@ def login():
             return jsonify({"msg": "비번 치세요", 'status':401})
 
         queried=models.User.query.filter_by(email=userEmail).first()
-        print('checkpw:', queried)
+        print('checkpw:', queried.pw)
         if bcrypt.checkpw(userPassword.encode('utf-8'), queried.pw.encode('utf-8')):
         # Identity can be any data that is json serializable
             access_token = create_access_token(identity=queried.id)
