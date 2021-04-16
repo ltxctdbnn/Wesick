@@ -58,17 +58,16 @@ const signInStyles = makeStyles((theme) => ({
     zIndex: "1",
     background: "white",
     boxShadow: "0px 2px 10px lightgray",
-    borderRadius: "1.8rem",
+    borderRadius: "1rem",
     padding: theme.spacing(5.75),
     textAlign: "center",
     color: theme.palette.text.secondary,
   },
 
   signInTitle: {
-    color: "black",
-    fontSize: "1.6vw",
+    fontSize: "2.0vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "2.2vh",
+    marginBottom: "1.5vh",
   },
 
   textField: {
@@ -86,7 +85,6 @@ const signInStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
-    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
@@ -103,7 +101,6 @@ const signInStyles = makeStyles((theme) => ({
     color: "gray",
     background: "white",
     border: "2px solid gray",
-    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "gray",

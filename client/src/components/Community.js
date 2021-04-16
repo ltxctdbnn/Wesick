@@ -69,7 +69,9 @@ const Community = () => {
     await axios
       .post(url + "/article/read", {
         method: "POST",
-        body: JSON.stringify({ currentPage: currentPage }),
+        body: JSON.stringify({
+          currentPage: currentPage,
+        }),
       })
       .then((response) => {
         console.log("[READ] 게시글 목록 Reloading");

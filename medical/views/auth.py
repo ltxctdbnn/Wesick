@@ -5,7 +5,6 @@ from flask_cors import CORS
 from .. import models
 from datetime import datetime, timedelta
 from flask_jwt_extended import (JWTManager, jwt_required, create_access_token, get_jwt_identity, unset_jwt_cookies, create_refresh_token)
-from ast import literal_eval
 
 bp = Blueprint('auth', __name__, url_prefix='/')
 
@@ -23,13 +22,13 @@ def register():
         
     else:
         print('check')
-        body=literal_eval(request.get_json()['body'])
+        body=request.get_json(force=True)['body'].split('"')
 
 
-        email = body['email']
-        password = body['password']
-        name = body['name']
-        nickname=body['nickname']
+        email = body[3]
+        password = body[7]
+        name = body[11]
+        nickname=body[15]
 
         print(email,password, name, nickname) #확인용....나중에 삭제할것
         
@@ -63,10 +62,9 @@ def login():
         return jsonify({"msg": "Missing JSON in request"}), 402
     else:
         print('check')
-        body=literal_eval(request.get_json()['body'])
-        print(body)
-        userEmail = body['userEmail']
-        userPassword = body['userPassword']
+        body=request.get_json(force=True)['body'].split('"')
+        userEmail = body[3]
+        userPassword = body[7]
         print(userEmail, userPassword)
         if not userEmail:
             return jsonify({"msg": "아이디 치세요", 'status':401})
@@ -97,18 +95,3 @@ def login():
                         })
         else:
             return jsonify({"msg":"비밀번호 불일치", "status":401})
-
-
-@bp.route("/refresh", methods=["POST"])
-@jwt_required(refresh=True)
-def refresh():
-    identity = get_jwt_identity()
-    access_token = create_access_token(identity=queried.id, fresh=False)
-    return jsonify(access_token=access_token)
-
-
-# Only allow fresh JWTs to access this route with the `fresh=True` arguement.
-@bp.route("/protected", methods=["GET"])
-@jwt_required(fresh=True)
-def protected():
-    return jsonify(foo="bar")

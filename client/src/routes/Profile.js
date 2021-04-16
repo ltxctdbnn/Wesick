@@ -1,23 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
-import { storageService } from "fBase";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Chip from "@material-ui/core/Chip";
-import Paper from "@material-ui/core/Paper";
-import { CancelScheduleSendSharp } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,19 +17,6 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     padding: theme.spacing(12),
-    textAlign: "center",
-  },
-
-  insidePaperHeader: {
-    height: theme.spacing(12),
-    // padding: theme.spacing(2),
-    paddingLeft: theme.spacing(5),
-    textAlign: "center",
-  },
-
-  insidePaper: {
-    // height: theme.spacing(11),
-    padding: theme.spacing(2),
     textAlign: "center",
   },
 
@@ -61,13 +36,13 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Spoqa Han Sans Neo",
   },
 
-  profileForm: {
+  profile: {
     width: "35vw",
     position: "absolute",
     zIndex: "1",
     background: "white",
     boxShadow: "0px 2px 10px lightgray",
-    borderRadius: "1.8rem",
+    borderRadius: "1rem",
     padding: theme.spacing(5.75),
     textAlign: "center",
     color: theme.palette.text.secondary,
@@ -86,56 +61,27 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paperIntro: {
-    padding: "1vw",
-    width: "15vw",
-    height: "10vh",
+    width: "20vw",
+    height: "12vh",
     border: "1px solid lightgray",
     borderRadius: "0.5rem",
   },
 
-  uploadProfile: {
-    paddingLeft: theme.spacing(5),
-    marginBottom: "1vh",
-  },
-
   uploadProfileImg: {
-    width: "6vw",
-    height: "11.5vh",
+    width: "7vw",
+    height: "14vh",
     color: "white",
     background: "lightgray",
-    padding: "25px",
-    marginRight: "4vw",
-    border: "1px solid lightgray",
-    borderRadius: "5rem",
-    textAlign: "center",
-  },
-
-  prevImg: {
-    width: "6vw",
-    height: "11.5vh",
-    // padding: "25px",
-    border: "1px solid lightgray",
-    borderRadius: "5rem",
-    // textAlign: "center",
-  },
-
-  prevProfileImg: {
-    width: "5.5vw",
-    height: "11vh",
-    // color: "white",
-    // background: "lightgray",
-    padding: "25px",
-    marginRight: "4vw",
+    marginRight: "2vw",
     border: "1px solid lightgray",
     borderRadius: "5rem",
     textAlign: "center",
   },
 
   profileTitle: {
-    color: "black",
-    fontSize: "1.6vw",
+    fontSize: "2.0vw",
     fontFamily: "Spoqa Han Sans Neo",
-    marginBottom: "2.2vh",
+    marginBottom: "1.5vh",
   },
 
   TextField: {
@@ -174,7 +120,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#ff8a4e",
     background: "white",
     border: "2px solid #ff8a4e",
-    borderRadius: "0.8rem",
     boxShadow: "none",
     "&:hover": {
       background: "#ff8a4e",
@@ -188,97 +133,17 @@ const useStyles = makeStyles((theme) => ({
   },
 
   profileImg: {
-    width: "7vw",
-    height: "14vh",
+    border: "2px solid black",
     borderRadius: "5rem",
   },
-
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-
-  formControl: {
-    marginLeft: theme.spacing(4),
-    minWidth: 120,
-    maxWidth: 300,
-  },
-  chips: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  chip: {
-    margin: 2,
-  },
-
-  subtitle: {
-    textAlign: "left",
-    width: "6vw",
-    fontSize: "0.9vw",
-    fontFamily: "Spoqa Han Sans Neo",
-    marginTop: "2vh",
-    marginBottom: "2vh",
-    marginLeft: "1.5vw",
-    marginRight: "3vw",
-  },
-
-  sub: {
-    display: "flex",
-  },
-
-  subInput: {
-    paddingTop: "0.1vh",
-    paddingBottom: "0.1vh",
-    marginTop: "2vh",
-    marginBottom: "2vh",
-    lineHeight: "1.5",
-    color: "#495057",
-    backgroundColor: "#fff",
-    backgroundClip: "padding-box",
-    border: "1px solid #ced4da",
-    borderRadius: "0.5rem",
-    transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
-  },
-
-  userData: {
-    marginLeft: "5vw",
-    // paddingLeft: "3.5vw",
-  },
 }));
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
-
-function getStyles(disease, userDisease, theme) {
-  return {
-    fontWeight:
-      userDisease.indexOf(disease) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 // 프로필 작성 컴포넌트
 const Profile = () => {
   const url = `http://localhost:5000`;
-  const location = useLocation();
   const classes = useStyles();
-  const theme = useTheme();
   const history = useHistory();
   const [profilePhoto, setProfilePhoto] = useState("");
-  const [introduction, setIntroduction] = useState("");
-  const [userDiseases, setUserDiseases] = useState([]);
-  const [doctorPdf, setDoctorPdf] = useState("");
-  const [userLocation, setUserLocation] = useState("서울"); // 임시 샘플
-  const [age, setAge] = useState("");
-  const diseases = ["고혈압", "우울증", "탈모", "아토피", "당뇨", "비만"];
 
   // 프로필 사진 업로드 핸들러
   const onFileChange = (event) => {
@@ -318,28 +183,6 @@ const Profile = () => {
 
   // 프로필 사진 Clear 핸들러
   const onClearProfilePhoto = () => setProfilePhoto(null);
-
-  // 소개란 작성 핸들러
-  const onChangeHandler = (event) => {
-    const {
-      target: { name, value },
-    } = event;
-    if (name === "userIntroduction") {
-      setIntroduction(value);
-      console.log(introduction);
-    }
-  };
-
-  // 연령대 선택 핸들러
-  const onAgeChange = (event) => {
-    setAge(event.target.value);
-  };
-
-  // 관심질병 선택 핸들러
-  const handleChange = (event) => {
-    setUserDiseases(event.target.value);
-    console.log(userDiseases);
-  };
 
   // 작성 프로필 저장 핸들러
   const onSubmitProfile = async (event) => {
@@ -416,14 +259,11 @@ const Profile = () => {
         </Grid>
         <Grid item xs={4}>
           <Grid item xs={12}>
-            <div className={classes.profileForm}>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <h2 className={classes.profileTitle}>프로필 작성</h2>
-                </Grid>
-                <Grid item xs={1}></Grid>
-                <Grid item xs={4}>
-                  <div className={classes.uploadProfile}>
+            <div className={classes.profile}>
+              <h2 className={classes.profileTitle}>프로필 작성</h2>
+              <div className={classes.paperProfile}>
+                <Grid container item xs={12} spacing={3}>
+                  <Grid item xs={4}>
                     <div className={classes.uploadProfileImg}>
                       <input
                         accept="image/*"
@@ -435,145 +275,58 @@ const Profile = () => {
                       {profilePhoto && (
                         <div>
                           <img
-                            className={classes.prevImg}
+                            className={classes.profileImg}
                             src={profilePhoto}
-                            width="50px"
-                            height="50px"
+                            width="150px"
+                            height="150px"
                           />
                           <button onClick={onClearProfilePhoto}>지우기</button>
                         </div>
                       )}
-                      {profilePhoto ? (
-                        <></>
-                      ) : (
-                        <label htmlFor="icon-button-file">
-                          <IconButton
-                            aria-label="upload picture"
-                            component="span"
-                          >
-                            <PhotoCamera />
-                          </IconButton>
-                        </label>
-                      )}
-                    </div>
-                  </div>
-                </Grid>
-                <Grid item xs={6}>
-                  <textarea
-                    className={classes.paperIntro}
-                    name="userIntroduction"
-                    cols="40"
-                    rows="5"
-                    placeholder="소개말을 입력해주세요."
-                    onChange={onChangeHandler}
-                  ></textarea>
-                </Grid>
-                <Grid item xs={1}></Grid>
-                <div className={classes.userData}>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={10}>
-                    <div className={classes.sub}>
-                      <h5 className={classes.subtitle}>연령대</h5>
-                      <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-label">
-                          Age
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          value={age}
-                          onChange={onAgeChange}
+                      <label htmlFor="icon-button-file">
+                        <IconButton
+                          aria-label="upload picture"
+                          component="span"
                         >
-                          <MenuItem value={10}>10대</MenuItem>
-                          <MenuItem value={20}>20대</MenuItem>
-                          <MenuItem value={30}>30대</MenuItem>
-                          <MenuItem value={40}>40대</MenuItem>
-                          <MenuItem value={50}>50대</MenuItem>
-                          <MenuItem value={60}>60대</MenuItem>
-                          <MenuItem value={70}>70대</MenuItem>
-                          <MenuItem value={80}>80대</MenuItem>
-                          <MenuItem value={90}>90대</MenuItem>
-                        </Select>
-                      </FormControl>
+                          <PhotoCamera />
+                        </IconButton>
+                      </label>
                     </div>
                   </Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={10}>
-                    <div className={classes.sub}>
-                      <h5 className={classes.subtitle}>관심질환</h5>
-                      <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-mutiple-chip-label">
-                          Chip
-                        </InputLabel>
-                        <Select
-                          labelId="demo-mutiple-chip-label"
-                          id="demo-mutiple-chip"
-                          multiple
-                          value={userDiseases}
-                          onChange={handleChange}
-                          input={<Input id="select-multiple-chip" />}
-                          renderValue={(selected) => (
-                            <div className={classes.chips}>
-                              {selected.map((value) => (
-                                <Chip
-                                  key={value}
-                                  label={value}
-                                  className={classes.chip}
-                                />
-                              ))}
-                            </div>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {diseases.map((disease) => (
-                            <MenuItem
-                              key={disease}
-                              value={disease}
-                              style={getStyles(disease, userDiseases, theme)}
-                            >
-                              {disease}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </div>
+                  <Grid item xs={8}>
+                    <input
+                      className={classes.paperIntro}
+                      id="self-introduction-input"
+                      type="text"
+                      placeholder="  소개말을 입력해주세요."
+                    />
                   </Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={10}>
-                    <div className={classes.sub}>
-                      <h5 className={classes.subtitle}>우리동네</h5>
-                      <input className={classes.subInput} type="text" />
-                    </div>
-                  </Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={1}></Grid>
-                  <Grid item xs={10}>
-                    <div className={classes.sub}>
-                      <h5 className={classes.subtitle}>토닥터 인증</h5>
-                      <input
-                        id="doctor-validate-input"
-                        className={classes.subInput}
-                        type="file"
-                        accept=".pdf"
-                        onChange={onDoctorPdfChange}
-                      />
-                    </div>
-                  </Grid>
-                  <Grid item xs={1}></Grid>
-                </div>
-                <Grid item xs={12}>
-                  <Button
-                    className={classes.ButtonRegister}
-                    variant="contained"
-                    size="large"
-                    onClick={onSubmitProfile}
-                  >
-                    저장
-                  </Button>
                 </Grid>
-              </Grid>
+              </div>
+              <div className={classes.interest}>
+                <h5>관심질환 설정하기</h5>
+              </div>
+              <br />
+              <br />
+              <div className={classes.location}>
+                <h5>우리동네 설정하기</h5>
+              </div>
+              <br />
+              <br />
+              <div className={classes.certification}>
+                <h5>토닥터 인증</h5>
+                <input id="doctor-validate-input" type="file" accept=".pdf" />
+              </div>
+              <br />
+              <br />
+              <Button
+                className={classes.ButtonRegister}
+                variant="contained"
+                size="large"
+                onClick={onSave}
+              >
+                저장
+              </Button>
             </div>
           </Grid>
         </Grid>

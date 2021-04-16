@@ -18,7 +18,6 @@ bp = Blueprint('chat', __name__, url_prefix='/')
 
 
 @bp.route('/chatlist', methods=['GET'])
-@jwt_required()
 def chatlist():
     users = models.User.query.all()
     userlist = {}
