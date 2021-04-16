@@ -11,11 +11,11 @@ import pymysql
 from flask_cors import CORS
 from pymongo import MongoClient
 
+# from .socket import socketio
 
 db = SQLAlchemy()
 migrate = Migrate()
-
-
+client = MongoClient("mongodb://localhost:27017/medical")
 # --------------------------------------------------------------------------- #
 
 
@@ -28,27 +28,24 @@ def create_app():
     migrate.init_app(app, db)
 
     from . import models
-    from .socket import socketio
 
     # cors
     CORS(app, supports_credentials=True)
 
-    socketio.init_app(app)
     # 블루프린트
 # --------------------------------------------------------------------------- #
-    from .views import auth, community, chat, user_profile
+    from .views import auth, community, chat, socket
 
     app.register_blueprint(chat.bp)
     app.register_blueprint(auth.bp)
     app.register_blueprint(community.bp)
-    app.register_blueprint(user_profile.bp)
     bcrypt = Bcrypt(app)
-
+    socket.socketio.init_app(app)
 
 # Setup the Flask-JWT-Extended extension
     app.config['JWT_SECRET_KEY'] = 'todaktodak token'
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
-    app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+    app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(hours=20)
 
     jwt = JWTManager(app)
 
