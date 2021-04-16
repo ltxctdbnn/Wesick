@@ -12,7 +12,7 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 // [게시글] 컴포넌트
 const Posting = ({ postingObj, content, isOwner, onReadPosting }) => {
-  const url = `http://elice-kdt-ai-track-vm-da-09.koreacentral.cloudapp.azure.com:5000`;
+  const url = `${window.location.origin}:5000`;
   const [editing, setEditing] = useState(false);
   const [newPosting, setNewPosting] = useState(postingObj.content);
   const [comment, setComment] = useState("");

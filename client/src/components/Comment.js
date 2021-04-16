@@ -9,7 +9,7 @@ import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 // [댓글] 컴포넌트
 const Comment = ({ commentObj, content, isOwner, onReadComment }) => {
-  const url = `http://elice-kdt-ai-track-vm-da-09.koreacentral.cloudapp.azure.com:5000`;
+  const url = `${window.location.origin}:5000`;
   const [likeCount, setLikeCount] = useState(commentObj.likepeoplelength);
   const [likeState, setLikeState] = useState(
     Boolean(commentObj.likepeople.find(liked))

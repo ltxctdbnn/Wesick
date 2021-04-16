@@ -5,7 +5,8 @@ import SignUp from "routes/SignUp";
 import Home from "routes/Home";
 import Profile from "routes/Profile";
 import MyPage from "routes/MyPage";
-import Chat from "routes/Chat";
+import ChatContainer from "routes/ChatContainer";
+import UserRelations from "routes/UserRelations";
 
 const AppRouter = ({ isLoggedIn }) => {
   return (
@@ -20,7 +21,10 @@ const AppRouter = ({ isLoggedIn }) => {
             <Route exact path="/mypage">
               <MyPage />
             </Route>
-            <Route exact path="/chat" component={Chat} />
+            <Route exact path="/chat" component={ChatContainer} />
+            <Route exact path="/user-relations">
+              <UserRelations />
+            </Route>
           </>
         ) : (
           <>

@@ -10,15 +10,8 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
 
 bp = Blueprint('chat', __name__, url_prefix='/')
 
-
-# @bp.route('/')
-# def home():
-
-#     return 'community page ok'
-
-
 @bp.route('/chatlist', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def chatlist():
     users = models.User.query.all()
     userlist = {}
@@ -29,12 +22,11 @@ def chatlist():
 
 
 @bp.route('/chat', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def chat():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
     else:
-        print('check')
         username = request.json.get('userName')
         print('userName:', userName)
 
@@ -43,7 +35,7 @@ def chat():
 
 
 @bp.route('/room', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def room():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 402
@@ -67,13 +59,20 @@ def room():
 
             roominfo2 = models.Channel.query.filter_by(
                 user_one=lst[0], user_two=lst[1]).first()
+
+            is_join = models.IsJoin(
+                room_id=roominfo2.id,
+                user_one=0,
+                user_two=0
+            )
+            models.db.session.add(is_join)
+            models.db.session.commit()
             print(
-                f'room == {roominfo2}, user_one == {user1}, user_two == {user2}')
+                f'room == {roominfo2.id}, user_one == {user1}, user_two == {user2}')
             return jsonify({"msg": "방 생성 성공", "roomid": roominfo2.id, 'status': 300})
         else:
             roomid = roominfo.id
 
             print(
                 f'room == {roomid}, user_one == {lst[0]}, user_two == {lst[1]}')
-
             return jsonify({"roomid": roomid, "status": 300})

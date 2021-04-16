@@ -3,6 +3,7 @@ import Community from "components/Community";
 import ChatList from "components/ChatList";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -92,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
 
 // 홈 페이지
 const Home = () => {
+  const history = useHistory();
   const classes = useStyles();
 
   // 홈으로 이동 핸들러
@@ -101,7 +103,7 @@ const Home = () => {
 
   // 마이페이지 이동 핸들러
   const onMoveMyPage = () => {
-    window.location.replace("/mypage");
+    history.push("/mypage");
   };
 
   // 로그아웃 핸들러

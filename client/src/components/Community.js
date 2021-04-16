@@ -9,7 +9,7 @@ import { Row, Col } from "react-bootstrap";
 
 // [커뮤니티] 컴포넌트
 const Community = () => {
-  const url = `http://elice-kdt-ai-track-vm-da-09.koreacentral.cloudapp.azure.com:5000`;
+  const url = `${window.location.origin}:5000`;
   const [posting, setPosting] = useState(""); // 게시글(내용)
   const [newPosting, setNewPosting] = useState(""); // 새로운 게시글
   const [postings, setPostings] = useState([]); // 게시글 배열
@@ -134,7 +134,7 @@ const Community = () => {
                       value={posting}
                       onChange={onPosting}
                       placeholder="내용을 입력하세요."
-                      maxLength={120}
+                      maxLength={1000}
                       style={{
                         padding: "16px",
                         width: "100%",

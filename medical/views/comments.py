@@ -33,7 +33,6 @@ def create_comment():
     date = (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
     commentid = str(userid)+';'+str(date)
-    print(profilephoto.profilephotourl, date)
 
     comment = mycol.insert_one({
         'commentid': commentid,

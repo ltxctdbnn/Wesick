@@ -9,10 +9,13 @@ from flask_jwt_extended import (JWTManager, jwt_required, create_access_token,
                                 get_jwt_identity, unset_jwt_cookies, create_refresh_token)
 from ast import literal_eval
 
+
+
 bp = Blueprint('community', __name__, url_prefix='/')
 
 mydb = models.client['medical']  # db name
 mycol = mydb['community_post']  # collection name
+
 
 # bp 테스트 /community붙여서 시험
 
@@ -92,7 +95,7 @@ def modify_articles():
     date = (datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
     mycol.update_one(
-        {'postingid': postingId},
+        {'postingid': postingid},
         {'$set': {'content': content, 'date': date}}
     )
     print('update_ok')
