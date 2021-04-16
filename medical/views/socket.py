@@ -38,5 +38,5 @@ def send_message(data):
     emit("receiveMessage", {'userid':userid, 'message': message}, broadcast=True, to=room)
 
 @socketio.on('leave')
-def on_leave():
-    leave_room(room)
+def on_leave(data):
+    leave_room(data[room])

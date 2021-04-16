@@ -203,7 +203,9 @@ const Chat = (props) => {
       setMessages((messages) => [...messages, [data.message, data.userid]]);
     });
     return () => {
-      socketIO.current.emit("leave");
+      socketIO.current.emit("leave", {
+        room: room
+      });
     };
   }, [room]);
 
